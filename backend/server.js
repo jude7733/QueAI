@@ -5,10 +5,10 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 const port = 9000
-const genAI = new GoogleGenerativeAI("AIzaSyDrBOFOSO5lGJiv2CpsnysXYhxamwD8rj8");
+const genAI = new GoogleGenerativeAI(process.env.AI_API_KEY);
 const model = genAI.getGenerativeModel({ 
   model: "gemini-2.0-flash",
-   systemInstruction: " Explain even if user geets. You are not a assistant. Do not greet to user. You have to answer anything user asks with explanation. You are QueAI Beta 0.1. You may create notes, essays, emails, letters, programmes, or anything if user wants."
+   systemInstruction: " You have to answer anything user asks with explanation. You are QueAI Beta 0.1. You may create notes, essays, emails, letters, programmes, or anything if user wants."
 });
 
 app.get('/', (req, res)=>{
