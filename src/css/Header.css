@@ -1,0 +1,31 @@
+header{
+  height: 60px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  background: var(--main-bg);
+  z-index: 1;
+}
+
+.headcol{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.headcol:nth-child(2){
+  text-align: center;
+  justify-content: center;
+}
+.headcol:nth-child(3) {
+  justify-content: end;
+}
+
+#headLogo{
+  width: 40px;
+  height: 40px;
+}

@@ -1,0 +1,19 @@
+.home{
+  height: 100%;
+  width: 100%;
+  padding: 100px 15px;
+}
+
+.logo{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+.logo img{
+  height: 50px;
+  width: 50px;
+}
+.logo h1{
+  font-size: 2.3em;
+}

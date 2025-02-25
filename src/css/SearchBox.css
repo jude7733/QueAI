@@ -1,0 +1,28 @@
+.searchBox{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: var(--search-bg);
+  border-radius: 45px;
+  padding: 10px;
+  position: relative;
+  margin-top: 0px;
+  transition: border-radius 0.2s ease-in-out;
+  margin-bottom: 20px;
+}
+.home .searchBox{
+  margin-top: 25px;
+}
+
+.searchBox textarea{
+  width: 100%;
+  outline: none;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-family: customFonts;
+  padding: 0 10px;
+  max-height: 120px;
+  word-wrap: break-word;
+  resize: none;
+}

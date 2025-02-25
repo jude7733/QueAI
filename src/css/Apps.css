@@ -1,0 +1,21 @@
+.apps{
+  height: 100%;
+  width: 100%;
+  padding: 0 15px;
+}
+.nothing{
+  height: 60%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.7;
+}
+.nothing span{
+  font-size: 40px;
+}
+.nothing p{
+  font-size: 16px;
+}

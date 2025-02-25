@@ -1,0 +1,27 @@
+.smallBtn{
+  min-height: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  max-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+.smallBtn:hover{
+  background: var(--button-onhover)
+}
+.smallBtn span{
+  pointer-events: none;
+}
+.smallBtn.inactive{
+  opacity: 0.5;
+  pointer-events: none;
+}
+.smallBtn.active{
+  opacity: 1;
+  pointer-events: auto;
+}

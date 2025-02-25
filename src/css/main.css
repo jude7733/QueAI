@@ -1,0 +1,37 @@
+@font-face {
+  font-family: customFonts;
+  src: url(../assets/linotte.otf);
+}
+*,
+*::after,
+*::before{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  text-decoration: none;
+  font-family: customFonts;
+  color: var(--main-text);
+}
+h1, h2, h3, h4, h5, h6, p, span{
+  padding: 0;
+  margin: 0;
+  pointer-events: none;
+}
+html{
+  scroll-behavior: smooth;
+}
+body{
+  height:100%;
+  width: 100%;
+  overflow-y: hidden;
+  font-family: customFonts;
+  background: var(--main-bg);
+  display: flex;
+  flex-direction: column;
+}
+main{
+  height: 100%;
+  width: 100%;
+  padding-top: 60px;
+}
