@@ -5,7 +5,7 @@ import SearchBox from '../components/SearchBox.jsx'
 import Toolbar from '../components/Toolbar.jsx'
 import '../css/Search.css'
 import '../css/LoadingBar.css'
-const apiEndpoint = "http://localhost:9000/api/askai/"
+const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
 const getResult = async (prompt) =>{
   try{
     const response = await axios.post(apiEndpoint, {prompt: prompt})
