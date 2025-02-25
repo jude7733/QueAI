@@ -5,7 +5,7 @@ import SearchBox from '../components/SearchBox.jsx'
 import Toolbar from '../components/Toolbar.jsx'
 import '../css/Search.css'
 import '../css/LoadingBar.css'
-const apiEndpoint = "http://localhost:9000/api/askai/"
+const apiEndpoint = "https://queai-backend.vercel.app/api/askai/"
 const getResult = async (prompt) =>{
   try{
     const response = await axios.post(apiEndpoint, {prompt: prompt})
