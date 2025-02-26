@@ -1,0 +1,22 @@
+.chipContainer{
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.chip{
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #272e45;
+  border-radius: 10px;
+}
+
+.chip span{
+  font-size: 16px;
+  color: #738ee6;
+}
+.chip p{
+  font-size: 14px;
+  color: #738ee6;
+}

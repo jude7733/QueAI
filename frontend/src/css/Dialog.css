@@ -1,0 +1,110 @@
+.overlay{
+  z-index: 1000;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.2);
+}
+
+.dialog{
+  background: var(--dialog-bg);
+  border-radius: 2.6rem;
+  width: 300px;
+  padding: 20px 25px 15px;
+  box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: open 0.2s ease-in-out;
+}
+
+.dialog.selection{
+  padding: 20px 10px 15px;
+}
+
+.dialog span{
+  text-align: center;
+}
+.dMessage{
+  max-height: 400px;
+  overflow-y: scroll;
+  line-height: 24px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  font-size: 18px;
+}
+
+.dialog.selection .dTitle{
+  text-align: center;
+  font-size: 22px;
+}
+
+.dButton-container{
+  height: 40px;
+  min-width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.dButton{
+   padding: 10px 20px;
+  border-radius: 20px;
+  border: 0;
+  outline: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.dButton#cancelBtn:hover{
+  background: rgba(0,0,0,0.1);
+}
+
+.dButton#confirmBtn:hover{
+  filter: brightness(1.2);
+}
+
+.dButton#confirmBtn{
+  background: #682EA6;
+}
+
+.langmap{
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.langmap li{
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  align-items: center;
+  border-radius: 10px;
+  padding: 0 15px;
+}
+
+.langmap li:hover{
+  background: rgba(0,0,0,0.3);
+}
+
+@keyframes open{
+  0%{
+    opacity: 0;
+    scale: 0.8;
+  }
+}
+  100%{
+    opacity: 1;
+    scale: 1;
+  }
+}
