@@ -24,13 +24,13 @@ app.post('/api/askai', async(req, res)=>{
     const result = await model.generateContent(prompt);
     const responseText = result.response.text()
     let text = responseText
-    text = text.replace(/\*\*(.*?)\*\*/g, '$1');
+   /* text = text.replace(/\*\*(.*?)\*\*/g, '$1');
       text = text.replace(/```(.*?)```/gs, (match, p1) => {
             const escapedCode = p1.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             return `
       ${escapedCode}`;
           });
-          text = text.replace(/\*/g, '•')
+          text = text.replace(/\*/g, '•') */
     res.json({text})
   }catch(err){
     res.json({err})
