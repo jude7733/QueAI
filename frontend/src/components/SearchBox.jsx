@@ -40,7 +40,7 @@ export default function SearchBox(props){
       
     }
     let query = inputBox.value.trim()
-    navigate(`/search?q=${query} ${props.language}`)
+    navigate(`/search?q=${query}&&lang=${props.language}`)
     inputBox.value = ""
     setBtnState(false)
     searchBox.style.borderRadius = '45px'

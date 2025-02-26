@@ -10,6 +10,8 @@
   gap: 5px;
   background: #272e45;
   border-radius: 10px;
+  max-width: 120px;
+  justify-content: space-between;
 }
 
 .chip span{

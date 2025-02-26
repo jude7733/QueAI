@@ -14,10 +14,11 @@ import SelectionChip from '../components/SelectionChip.jsx'
 import '../css/Search.css'
 import '../css/LoadingBar.css'
 const apiEndpoint = "https://queai-backend.vercel.app/api/askai"
-const getResult = async (prompt) => {
+const getResult = async (prompt, lang) => {
   try {
     const response = await axios.post(apiEndpoint, {
-      prompt: prompt
+      prompt: prompt,
+      lang: lang
     })
     console.log(response.data.responseText)
     return response.data.responseText
@@ -36,10 +37,11 @@ export default function Search(props) {
   const location = useLocation()
   const query = new URLSearchParams(location.search)
   const q = query.get('q')
+  const qlang = query.get('lang')
   useEffect(()=> {
     setAns("")
     const setResp = async () => {
-      await setAns(getResult(q))
+      await setAns(getResult(q, qlang))
     }
     setTimeout(()=> {
       setResp()

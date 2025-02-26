@@ -19,9 +19,9 @@ app.get('/', (req, res)=>{
 })
 
 app.post('/api/askai', async(req, res)=>{
-  const {prompt} = req.body
+  const {prompt, lang} = req.body
   try{
-    const result = await model.generateContent(prompt);
+    const result = await model.generateContent(`${prompt} answer in ${lang}`);
     const responseText = result.response.text()
     res.json({responseText})
   }catch(err){
