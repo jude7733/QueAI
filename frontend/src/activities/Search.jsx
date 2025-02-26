@@ -9,7 +9,7 @@ const apiEndpoint = "https://queai-backend.vercel.app/api/askai"
 const getResult = async (prompt) =>{
   try{
     const response = await axios.post(apiEndpoint, {prompt: prompt})
-    return response.data.text
+    return response.data.responseText
   }catch(err){
     console.log(err)
   }
