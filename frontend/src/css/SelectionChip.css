@@ -1,6 +1,8 @@
 .chipContainer{
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
+  justify-content: end;
+  gap: 10px;
 }
 
 .chip{
@@ -10,15 +12,18 @@
   gap: 5px;
   background: #272e45;
   border-radius: 10px;
-  max-width: 120px;
   justify-content: space-between;
 }
 
 .chip span{
   font-size: 16px;
   color: #738ee6;
+  padding: 0;
+  margin: 0;
 }
 .chip p{
   font-size: 14px;
   color: #738ee6;
+  padding: 0;
+  margin: 0;
 }

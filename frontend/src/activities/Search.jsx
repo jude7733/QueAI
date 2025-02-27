@@ -14,11 +14,12 @@ import SelectionChip from '../components/SelectionChip.jsx'
 import '../css/Search.css'
 import '../css/LoadingBar.css'
 const apiEndpoint = "https://queai-backend.vercel.app/api/askai"
-const getResult = async (prompt, lang) => {
+const getResult = async (prompt, lang, resType) => {
   try {
     const response = await axios.post(apiEndpoint, {
       prompt: prompt,
-      lang: lang
+      lang: lang,
+      type: resType
     })
     console.log(response.data.responseText)
     return response.data.responseText
@@ -32,19 +33,23 @@ export default function Search(props) {
   const [ans,
     setAns] = useState("")
   const [lang, setLang] = useState('English')
-  const [tempLang, setTempLang] = useState('')
+  const [tempLang, setTempLang] = useState('English')
+  const [tempResType, setTempResType] = useState('Balanced')
+  const [resType, setResType] = useState('Balanced')
   const [showLangDialog, setShowLangDialog] = useState(false)
+  const [showTypeDialog, setShowTypeDialog] = useState(false)
   const location = useLocation()
   const query = new URLSearchParams(location.search)
   const q = query.get('q')
   const qlang = query.get('lang')
+  const qtype = query.get('type')
   useEffect(()=> {
     setAns("")
     const setResp = async () => {
-      await setAns(getResult(q, qlang))
+      await setAns(getResult(q, qlang, qtype))
     }
     setTimeout(()=> {
-      setResp()
+      if(q) setResp()
     }, 10)
   }, [q])
   
@@ -58,17 +63,29 @@ export default function Search(props) {
     setTempLang(languages[index])
   }
   
-  const ifCancel = () =>{
-    setShowLangDialog(false)
+  const ifCancel = (dType) =>{
+    if(dType==='lang')
+      setShowLangDialog(false)
+    else if(dType==='type')
+      setShowTypeDialog(false)
   }
   
-  const ifConfirm = () =>{
-    setLang(tempLang)
-    setShowLangDialog(false)
+  const ifConfirm = (dType) =>{
+    if(dType ==='lang'){
+      setLang(tempLang)
+      setShowLangDialog(false)
+    }else if(dType === 'type'){
+      setResType(tempResType)
+      setShowTypeDialog(false)
+    }
+    
   }
   
-  const showDialog = () =>{
-    setShowLangDialog(true)
+  const showDialog = (d) =>{
+    if(d==='lang')
+      setShowLangDialog(true)
+    else if(d==='type')
+      setShowTypeDialog(true)
   }
 
   return(
@@ -77,11 +94,16 @@ export default function Search(props) {
         placeHolder={"Search QueAI"}
         responseRef={responseRef}
         language={lang}
+        type={resType}
         />
         
-        <div className='chipContainer'>
+         <div className='chipContainer'>
           <SelectionChip
-          onClick={showDialog}
+          onClick={()=> showDialog('type')}
+          icon={'bolt'}
+          body={resType} />
+          <SelectionChip
+          onClick={()=> showDialog('lang')}
           icon={'language'}
           body={lang} />
         </div>
@@ -89,7 +111,7 @@ export default function Search(props) {
         
         {
           showLangDialog === true && 
-          <Dialog type={'selection'} icon={'language'} title={'Choose language'} message={'Dialog message'} cancelTxt={'Cancel'} confirmTxt={'Confirm'} onCancel={ifCancel} onConfirm={ifConfirm} >
+          <Dialog type={'selection'} icon={'language'} title={'Choose language'} cancelTxt={'Cancel'} confirmTxt={'Confirm'} onCancel={()=> ifCancel('lang')} onConfirm={()=> ifConfirm('lang')} >
         <ul className='langmap' >
           {
             languages.map((lang, index)=>(
@@ -102,6 +124,51 @@ export default function Search(props) {
       </Dialog>
         }
         
+        {
+          showTypeDialog === true &&
+          <Dialog
+            type={'selection'}
+            icon={'bolt'}
+            title={'Response Type'}
+            cancelTxt={'Cancel'}
+            confirmTxt={'Confirm'}
+            onCancel={()=> ifCancel('type')}
+            onConfirm={()=> ifConfirm('type')}
+            >
+            <div className='typeSelector-container'>
+              
+              {
+                ["Fast", "Balanced", "Pro"].map((type, index)=>(
+                  <div className='typeSelector'>
+                <input type='radio' checked ={type === tempResType} onChange={()=> setTempResType(type)} />
+                <div className ='typeSelector-body' onClick={()=> setTempResType(type)} >
+                  <div className='typeSelector-title-container'>
+                    <span className='material-symbols-outlined'>bolt</span>
+                     <p>{type === 'Balanced' ? 'Balaced (Recommended)' : type}</p>
+                  </div>
+                  <p>
+                    {
+                      type === 'Fast' && 
+                      "Short and snappy answers for instant help. Takes less time to process."
+                    }
+                    {
+                      type === 'Balanced' && 
+                      "Thoughtful and balanced responses for everyday needs."
+                    }
+                    {
+                      type === 'Pro' && 
+                      "Detailed and thorough explanations for complex topics. Takes more time to process."
+                    }
+                  </p>
+                </div>
+              </div>
+                  
+                ))
+              }
+              
+            </div>
+          </Dialog>
+        }
       
       {
       q ?
