@@ -22,6 +22,7 @@ app.post('/api/askai', async(req, res)=>{
   const {prompt, lang} = req.body
   try{
     const result = await model.generateContent(`${prompt} answer in ${lang}`);
+    console.log(lang)
     const responseText = result.response.text()
     res.json({responseText})
   }catch(err){
