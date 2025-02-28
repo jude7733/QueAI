@@ -12,6 +12,7 @@
 }
 
 .dialog{
+  max-height: calc(100% - 100px);
   background: var(--dialog-bg);
   border-radius: 2.6rem;
   width: 340px;
@@ -96,11 +97,11 @@
 }
 
 .langmap li:hover{
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.1);
 }
 
 .typeSelector-container{
-
+  overflow-y: scroll;
 }
 .typeSelector{
   width: 100%;

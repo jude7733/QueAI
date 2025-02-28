@@ -22,18 +22,37 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Header />
-        <main>
-          <Routes>
-            <Route path='/' element={<Home />}  isActive = { location.pathname === '/' ? true : false } />
-            <Route path='/search' element={<Search/>} />
-            <Route path='/apps' element={<Apps/>} />
-            <Route path='/settings' element={<Settings/>} />
-          </Routes>
-        </main>
-        <NavBar />
+        {
+        window.innerWidth < 768 ? (
+          <>
+            <Header />
+            <main>
+              <Routes>
+                <Route path='/' element={<Home />} isActive={ location.pathname === '/' ? true: false } />
+                <Route path='/search' element={<Search />} />
+                <Route path='/apps' element={<Apps />} />
+                <Route path='/settings' element={<Settings />} />
+              </Routes>
+            </main>
+            <NavBar />
+          </>
+        ):
+        (
+          <>
+            <NavBar />
+            <main>
+              <Routes>
+                <Route path='/' element={<Home />} isActive={ location.pathname === '/' ? true: false } />
+                <Route path='/search' element={<Search />} />
+              <Route path='/apps' element={<Apps />} />
+                <Route path='/settings' element={<Settings />} />
+              </Routes>
+            </main>
+          </>
+        )
+        }
       </BrowserRouter>
-  </>
-)
+    </>
+  )
 }
 export default App

@@ -2,6 +2,7 @@ import {
   useState,
   useRef
 } from 'react'
+import { Link } from 'react-router'
 import Logo from '../assets/logosmall.png'
 import '../css/Home.css'
 import SearchBox from '../components/SearchBox.jsx'
@@ -14,9 +15,9 @@ export default function Home() {
           <img src={Logo} />
         <h1>Que AI</h1>
       </div>
-      <SearchBox
-        placeHolder={"Search QueAI"}
-      />
+      <Link to = '/search'>
+        <SearchBox placeHolder={"Search QueAI"} />
+      </Link>
     </div>
   </>
 )

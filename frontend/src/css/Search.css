@@ -2,10 +2,17 @@
   height: 100%;
   width: 100%;
   overflow-y: scroll;
-  padding: 0 15px 200px;
+  padding: 0 15px 300px;
+}
+
+@media (min-width: 768px){
+  .search{
+    padding-top: 20px;
+  }
 }
 
 .responseDiv{
+  min-height: 100%;
   width: 100%;
   padding: 10px 0;
   display: flex;

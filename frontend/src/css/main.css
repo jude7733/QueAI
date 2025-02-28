@@ -19,10 +19,11 @@ h1, h2, h3, h4, h5, h6, p, span{
   pointer-events: none;
 }
 html{
+  height: -webkit-fill-available;
   scroll-behavior: smooth;
 }
 body{
-  height:100%;
+  height: -webkit-fill-available%;
   width: 100%;
   overflow-y: hidden;
   font-family: customFonts;
@@ -33,5 +34,12 @@ body{
 main{
   height: 100%;
   width: 100%;
-  padding-top: 60px;
+  padding-top: 80px;
+}
+
+@media (min-width: 768px){
+  main{
+    padding-top: 0;
+    padding-left: 80px;
+  }
 }
