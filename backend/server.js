@@ -5,7 +5,7 @@ const cors = require('cors')
 const app = express()
 dotenv.config()
 app.use(cors({
-  origin: "https://queai.vercel.app"
+  origin: [ "https://queai.vercel.app" , "http://localhost:5173" ]
 }))
 app.use(express.json())
 const port = process.env.PORT
