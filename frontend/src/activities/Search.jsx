@@ -9,8 +9,10 @@ import {
   useEffect
 } from 'react'
 import SearchBox from '../components/SearchBox.jsx'
+import Header from '../components/Header.jsx'
 import Toolbar from '../components/Toolbar.jsx'
 import Dialog from '../components/Dialog.jsx'
+import SmallBtn from "../components/SmallBtn.jsx"
 import SelectionChip from '../components/SelectionChip.jsx'
 import '../css/Search.css'
 import '../css/LoadingBar.css'
@@ -23,9 +25,10 @@ const getRandomString = (length) => {
   }
   return result
 }
-const getResult = async (prompt, lang, resType) => {
+const getResult = async (history, prompt, lang, resType) => {
   try {
     const response = await axios.post(apiEndpoint, {
+      history: history,
       prompt: prompt,
       lang: lang,
       type: resType
@@ -39,6 +42,8 @@ const getResult = async (prompt, lang, resType) => {
 
 export default function Search(props) {
   const responseRef = useRef(null)
+  const [showDialogBox,
+    setShowDialogBox] = useState(false)
   const [ans,
     setAns] = useState("")
   const [lang,
@@ -49,30 +54,193 @@ export default function Search(props) {
     setTempResType] = useState('Balanced')
   const [resType,
     setResType] = useState('Balanced')
+  const [btnState,
+    setBtnState] = useState(false)
+  const [question,
+    setQuestion] = useState("")
+  const [spanHeight,
+    setSpanHeight] = useState()
+  const [messages,
+    setMessages] = useState([])
+    
+
   const [showLangDialog,
     setShowLangDialog] = useState(false)
   const [showTypeDialog,
     setShowTypeDialog] = useState(false)
   const location = useLocation()
-  const query = new URLSearchParams(location.search)
-  const q = query.get('q')
-  const qlang = query.get('lang')
-  const qtype = query.get('type')
-  useEffect(()=> {
-    setAns("")
-    const setResp = async () => {
-      await setAns(getResult(q, qlang, qtype))
+  
+  const inputBoxRef = useRef(null)
+  const scrollEndRef = useRef(null)
+  const lastElement = useRef(null)
+  const searchDivRef= useRef(null)
+  
+  useEffect(()=>{
+    if(messages[0]){
+      const node = lastElement.current
+    const searchDiv = searchDivRef.current
+    const scrollEnd = scrollEndRef.current
+    const parentHeight = scrollEnd.parentElement.offsetHeight
+   if(node.offsetHeight < parentHeight){
+     
+    scrollEnd.style.height = `${parentHeight - node.offsetHeight - 330 }px`
+   }
+   node.scrollIntoView(true)
     }
-    setTimeout(()=> {
-      if (q) setResp()
-    },
-      10)
-  }, [q])
+  }, [messages])
+
+  const handleInputChange = (e) => {
+    const inputBox = inputBoxRef.current
+    inputBox.rows = inputBox.value.split('\n').length;
+    inputBox.style.height = 'auto';
+    inputBox.style.height = inputBox.scrollHeight + 'px';
+    setBtnState(inputBox.value.length > 0)
+    setQuestion(inputBox.value)
+  }
+
+  const handleBtnClick = async (e) => {
+    
+    const history = []
+    
+    messages.map((message, index)=>{
+      history.push(
+        {
+          role : "user",
+          parts : [
+            { text : message.que }
+          ]
+        },
+        {
+          role: "model",
+          parts: [
+            { text : message.ans }
+          ]
+        }
+      )
+    })
+    
+    setMessages([...messages, 
+    {
+      que: question,
+      ans: ""
+    }]
+  )
+
+  
+    const inputBox = inputBoxRef.current
+    inputBox.value = ""
+    inputBox.rows = inputBox.value.split('\n').length;
+    inputBox.style.height = 'auto';
+    inputBox.style.height = inputBox.scrollHeight + 'px';
+    setBtnState(false)
+      
+    const response = await getResult(history, question, lang, resType)
+    
+    setMessages((prevMessages)=>{
+      const updatedMessages = [...prevMessages]
+      updatedMessages[updatedMessages.length - 1].ans = response
+      return updatedMessages
+    })
+    
+  }
+
+
 
   const languages = [
-    "Afrikaans", "Albanian", "Amharic", "Arabic", "Azerbaijani", "Bengali", "Bikol", "Bosnian", "Bulgarian", "Cantonese",
-    "Cebuano", "Croatian", "Czech", "Danish", "Dutch", "English", "Estonian", "Finnish", "French", "Fulani", "Georgian", "German", "Greek", "Hausa", "Hebrew", "Hiligaynon", "Hindi", "Hungarian", "Icelandic", "Igbo", "Ilocano", "Irish", "Italian", "Japanese", "Javanese", "Kapampangan", "Kazakh", "Khmer", "Korean", "Kurdish", "Lao", "Latvian", "Lithuanian", "Macedonian", "Maguindanao", "Malay", "Malayalam", "Maltese", "Mandarin Chinese", "Maranao", "Marathi", "Mongolian", "Myanmar", "Nepali", "Norwegian", "Odia", "Oromo", "Pashto", "Pangasinan", "Polish", "Portuguese", "Punjabi", "Romanian", "Russian", "Scottish Gaelic", "Serbian", "Shona", "Sindhi", "Sinhala", "Slovak", "Slovenian", "Somali", "Spanish", "Swahili", "Swedish", "Tagalog", "Tamil", "Tatar", "Telugu", "Thai", "Tigrinya", "Turkish", "Ukrainian", "Urdu",
-    "Uzbek", "Vietnamese", "Waray", "Welsh", "Wu Chinese", "Xhosa", "Yiddish", "Yoruba", "Zamboangueño Chavacano", "Zulu"
+    "Afrikaans",
+    "Albanian",
+    "Amharic",
+    "Arabic",
+    "Azerbaijani",
+    "Bengali",
+    "Bikol",
+    "Bosnian",
+    "Bulgarian",
+    "Cantonese",
+    "Cebuano",
+    "Croatian",
+    "Czech",
+    "Danish",
+    "Dutch",
+    "English",
+    "Estonian",
+    "Finnish",
+    "French",
+    "Fulani",
+    "Georgian",
+    "German",
+    "Greek",
+    "Hausa",
+    "Hebrew",
+    "Hiligaynon",
+    "Hindi",
+    "Hungarian",
+    "Icelandic",
+    "Igbo",
+    "Ilocano",
+    "Irish",
+    "Italian",
+    "Japanese",
+    "Javanese",
+    "Kapampangan",
+    "Kazakh",
+    "Khmer",
+    "Korean",
+    "Kurdish",
+    "Lao",
+    "Latvian",
+    "Lithuanian",
+    "Macedonian",
+    "Maguindanao",
+    "Malay",
+    "Malayalam",
+    "Maltese",
+    "Mandarin Chinese",
+    "Maranao",
+    "Marathi",
+    "Mongolian",
+    "Myanmar",
+    "Nepali",
+    "Norwegian",
+    "Odia",
+    "Oromo",
+    "Pashto",
+    "Pangasinan",
+    "Polish",
+    "Portuguese",
+    "Punjabi",
+    "Romanian",
+    "Russian",
+    "Scottish Gaelic",
+    "Serbian",
+    "Shona",
+    "Sindhi",
+    "Sinhala",
+    "Slovak",
+    "Slovenian",
+    "Somali",
+    "Spanish",
+    "Swahili",
+    "Swedish",
+    "Tagalog",
+    "Tamil",
+    "Tatar",
+    "Telugu",
+    "Thai",
+    "Tigrinya",
+    "Turkish",
+    "Ukrainian",
+    "Urdu",
+    "Uzbek",
+    "Vietnamese",
+    "Waray",
+    "Welsh",
+    "Wu Chinese",
+    "Xhosa",
+    "Yiddish",
+    "Yoruba",
+    "Zamboangueño Chavacano",
+    "Zulu"
   ]
 
   const selectLang = (index) => {
@@ -80,19 +248,32 @@ export default function Search(props) {
   }
 
   const ifCancel = (dType) => {
-    if (dType === 'lang')
-      setShowLangDialog(false)
-    else if (dType === 'type')
-      setShowTypeDialog(false)
+    if (dType === 'lang') {
+      setShowDialogBox(false)
+      setTimeout(()=> {
+        setShowLangDialog(false)
+      }, 200)
+    } else if (dType === 'type') {
+      setShowDialogBox(false)
+      setTimeout(()=> {
+        setShowTypeDialog(false)
+      }, 200)
+    }
   }
 
   const ifConfirm = (dType) => {
     if (dType === 'lang') {
       setLang(tempLang)
-      setShowLangDialog(false)
+      setShowDialogBox(false)
+      setTimeout(()=> {
+        setShowLangDialog(false)
+      }, 200)
     } else if (dType === 'type') {
       setResType(tempResType)
-      setShowTypeDialog(false)
+      setShowDialogBox(false)
+      setTimeout(()=> {
+        setShowTypeDialog(false)
+      }, 200)
     }
 
   }
@@ -105,12 +286,41 @@ export default function Search(props) {
   }
 
   return(
-    <div className="search">
-
-
+    <>
+      <Header/>
+    <div className="search" ref={searchDivRef} >
+      {
+      messages.map((message, index) =>
+      <div key={index} ref = { index === messages.length - 1 ? lastElement : null } className="responseDiv">
+        <h1>{message.que}</h1>
+        <div id="response"
+          >
+          {
+          message.ans !== "" ?
+          message.ans:
+          <div className='loadingBars'>
+            <div className='loadingBar' />
+            <div className='loadingBar' />
+            <div className='loadingBar' />
+          </div>
+          }
+        </div>
+      </div>
+    )
+    }
+      
+      
       {
       showLangDialog === true &&
-      <Dialog type={'selection'} icon={'language'} title={'Choose language'} cancelTxt={'Cancel'} confirmTxt={'Confirm'} onCancel={()=> ifCancel('lang')} onConfirm={()=> ifConfirm('lang')}>
+      <Dialog
+        type={'selection'}
+        icon={'language'}
+        title={'Choose language'}
+        cancelTxt={'Cancel'} confirmTxt={'Confirm'}
+        onCancel={()=> ifCancel('lang')}
+        onConfirm={()=> ifConfirm('lang')}
+        visible={showDialogBox}
+        >
         <ul className='langmap'>
           {
           languages.map((lang, index)=>(
@@ -139,6 +349,7 @@ export default function Search(props) {
         confirmTxt={'Confirm'}
         onCancel={()=> ifCancel('type')}
         onConfirm={()=> ifConfirm('type')}
+        visible={showDialogBox}
         >
         <div className='typeSelector-container'>
 
@@ -177,44 +388,51 @@ export default function Search(props) {
     </Dialog>
     }
 
-    {
-    q ?
-    <>
-      <div className="responseDiv">
-        <h1>{q}</h1>
-        <div id="response" ref={responseRef}>
-          {
-          ans !== "" ? ans:
-          <div className="loadingBars">
-            <div className="loadingBar" />
-            <div className="loadingBar" />
-            <div className="loadingBar" />
+    <div className='searchBoxContainer'>
+      <div className="searchBox">
+        <div className='searchBoxInputContainer'>
+          <textarea
+            type="text"
+            rows="1"
+            placeholder="Ask QueAi"
+            id="promptText"
+            onChange={handleInputChange}
+            defaultValue={""}
+            ref={inputBoxRef}
+            />
+        </div>
+        <div className='searchBoxButtonContainer'>
+          <div className='chipContainer'>
+
+            <SelectionChip
+              onClick={()=> {
+                showDialog('type')
+                setShowDialogBox(true)
+              }}
+              icon={'bolt'}
+              body={resType} />
+            <SelectionChip
+              onClick={()=> {
+                showDialog('lang')
+                setShowDialogBox(true)
+              }}
+              icon={'language'}
+              body={lang} />
+
+
+            <span className='blank' />
+            <SmallBtn
+              state={btnState == true ? "active": "inactive"}
+              icon={"send"}
+              onClick={handleBtnClick}
+              />
           </div>
-          }
         </div>
       </div>
-    </>:
-    <div className='responseDiv' />
-    }
-    <div className='searchBoxContainer'>
-      <SearchBox
-        placeHolder={"Ask QueAI"}
-        focus = {true}
-        responseRef={responseRef}
-        language={lang}
-        type={resType}
-        >
-        <SelectionChip
-          onClick={()=> showDialog('type')}
-          icon={'bolt'}
-          body={resType} />
-        <SelectionChip
-          onClick={()=> showDialog('lang')}
-          icon={'language'}
-          body={lang} />
-      </SearchBox>
-    </div>
 
+    </div>
+    <div ref={scrollEndRef} />
   </div>
+  </>
 )
 }

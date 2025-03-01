@@ -22,7 +22,15 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  animation: open 0.2s ease-in-out;
+  opacity: 0;
+  scale: 0.9;
+  transition: 0.2s ease-in-out;
+}
+
+.dialog.show{
+  opacity: 1;
+  scale: 1;
+  transition: 0.2s ease-in-out;
 }
 
 .dialog.selection{
@@ -132,19 +140,4 @@
 .typeSelector-body .typeSelector-title-container p{
   font-size: 20px;
   font-weight: 800;
-}
-
-
-
-
-
-@keyframes open{
-  0%{
-    opacity: 0;
-    scale: 0.8;
-  }
-  100%{
-    opacity: 1;
-    scale: 1;
-  }
 }

@@ -27,7 +27,6 @@ export default function SearchBox(props) {
     const inputBox = inputBoxRef.current
     const searchBox = searchBoxRef.current
     inputBox.rows = inputBox.value.split('\n').length;
-
     inputBox.style.height = 'auto';
     inputBox.style.height = inputBox.scrollHeight + 'px';
     setBtnState(inputBox.value.length > 0)
@@ -39,11 +38,13 @@ export default function SearchBox(props) {
     if (props.responseRef) {
       const responseRef = props.responseRef
       const resRef = responseRef.current
-
     }
     let query = inputBox.value.trim()
     navigate(`/search?q=${query}&&lang=${props.language}&&type=${props.type}`)
     inputBox.value = ""
+    inputBox.rows = inputBox.value.split('\n').length;
+    inputBox.style.height = 'auto';
+    inputBox.style.height = inputBox.scrollHeight + 'px';
     setBtnState(false)
   }
 

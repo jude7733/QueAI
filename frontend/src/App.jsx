@@ -13,7 +13,6 @@ import About from './activities/About.jsx'
 import Search from './activities/Search.jsx'
 import Apps from './activities/Apps.jsx'
 import Settings from './activities/Settings.jsx'
-import Header from './components/Header.jsx'
 import NavBar from './components/NavBar.jsx'
 import './css/material-symbols-outlined.css'
 
@@ -25,7 +24,6 @@ function App() {
         {
         window.innerWidth < 768 ? (
           <>
-            <Header />
             <main>
               <Routes>
                 <Route path='/' element={<Home />} isActive={ location.pathname === '/' ? true: false } />

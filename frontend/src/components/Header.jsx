@@ -16,7 +16,9 @@ export default function Header(props){
       <div className="headcol">
         {route !== "/" ? <img id="headLogo" src={Logo}/> : null}
       </div>
-      <div className="headcol" />
+      <div className="headcol" >
+        <p>{props.text}</p>
+      </div>
       <div className="headcol">
         <SmallBtn icon={"menu"} />
       </div>
