@@ -27,7 +27,7 @@ function App() {
             <main>
               <Routes>
                 <Route path='/' element={<Home />} isActive={ location.pathname === '/' ? true: false } />
-                <Route path='/search' element={<Search />} />
+                <Route path='/chat/:chatId?' element={<Search />} />
                 <Route path='/apps' element={<Apps />} />
                 <Route path='/settings' element={<Settings />} />
               </Routes>

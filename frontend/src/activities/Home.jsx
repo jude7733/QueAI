@@ -15,7 +15,7 @@ export default function Home() {
           <img src={Logo} />
         <h1>Que AI</h1>
       </div>
-      <Link to = '/search'>
+      <Link to = '/chat'>
         <SearchBox placeHolder={"Search QueAI"} />
       </Link>
     </div>
