@@ -1,14 +1,15 @@
 import {
   useLocation,
   useParams,
-  useNavigate
+  useNavigate,
+  replace
 } from 'react-router'
 
 import axios from 'axios'
 import {
   useState,
   useRef,
-  useEffect
+  useEffect,
 } from 'react'
 import SearchBox from '../components/SearchBox.jsx'
 import Header from '../components/Header.jsx'
@@ -38,6 +39,7 @@ const getResult = async (history, prompt, lang, resType) => {
     return response.data.responseText
   }catch(err) {
     console.log(err)
+    return null
   }
 }
 
@@ -68,57 +70,142 @@ export default function Search(props) {
     setShowLangDialog] = useState(false)
   const [showTypeDialog,
     setShowTypeDialog] = useState(false)
-  const location = useLocation()
 
+  const location = useLocation()
+  const {state} = useLocation()
+  const navigate = useNavigate()
+
+  const {chatId} = useParams()
+  
   const inputBoxRef = useRef(null)
   const scrollEndRef = useRef(null)
   const lastElement = useRef(null)
   const searchDivRef = useRef(null)
 
-  const {
-    chatId
-  } = useParams()
 
-  const navigate = useNavigate()
+  const ifCancel = (dType) => {
+    if (dType === 'lang') {
+      setShowDialogBox(false)
+      setTimeout(()=> {
+        setShowLangDialog(false)
+      }, 200)
+    } else if (dType === 'type') {
+      setShowDialogBox(false)
+      setTimeout(()=> {
+        setShowTypeDialog(false)
+      }, 200)
+    }
+  }
+
+
+  useEffect(()=>{
+    if(chatId && localStorage.getItem(chatId) ){
+      setMessages(JSON.parse(localStorage.getItem(chatId)).messages)
+    }else {
+      navigate('/', {replace: true})
+    }
+  },[chatId, navigate])
+
+  useEffect(() => {
+  if (chatId) {
+    const savedData = JSON.parse(localStorage.getItem(chatId) || "{}")
+
+    if (savedData.messages && savedData.messages[0] && savedData.messages[0].ans === null) {
+      const msg = savedData.messages[0];
+      console.log("Running async function to get answer...");
+      
+      (async () => {
+        const result = await getResult(
+          [
+            {
+              role: "user",
+              parts: [{ text: msg.que }]
+            },
+            {
+              role: "model",
+              parts: [{ text: "" }]
+            }
+          ],
+          msg.que,
+          "English",
+          "Fast"
+        )
+
+
+        // Update localStorage with new answer
+        const updatedMessages = [{ que: msg.que, ans: result }]
+        localStorage.setItem(chatId, JSON.stringify({
+          messages: updatedMessages
+        }))
+
+        // Update UI
+        setMessages(updatedMessages)
+      })()
+
+      
+    } else if (savedData.messages) {
+      setMessages(savedData.messages)
+    }
+  }
+}, [chatId])
+
+
+  
 
   useEffect(()=> {
-    if (chatId && !messages[0]) {
-      
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (showLangDialog) {
+          ifCancel('lang')
+        } else if (showTypeDialog) {
+          ifCancel('type')
+        }
+      }
+
+      if (e.key === 'Enter' && btnState) {
+        handleBtnClick()
+        const inputBox = inputBoxRef.current
+        
+      }
     }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+      return () => {
+    window.removeEventListener('keydown', handleKeyDown);
+  };
+
+  }, [showLangDialog, showTypeDialog, ifCancel])
+
+  useEffect(()=> {
+    const inputBox = inputBoxRef.current
+    inputBox.focus()
   },[])
 
   useEffect(()=> {
     if (messages[0]) {
       const node = lastElement.current
       const searchDiv = searchDivRef.current
-      const scrollEnd = scrollEndRef.current
-      const parentHeight = scrollEnd.parentElement.offsetHeight
-      if (node.offsetHeight < parentHeight) {
+      // const scrollEnd = scrollEndRef.current
+      // const parentHeight = scrollEnd.parentElement.offsetHeight
+      // if (node.offsetHeight < parentHeight) {
 
-        scrollEnd.style.height = `${parentHeight - node.offsetHeight - 330 }px`
-      }
-      node.scrollIntoView(true)
+      //   scrollEnd.style.height = `${parentHeight - node.offsetHeight - 365 }px`
+      // }
+      // node.scrollIntoView(true)
 
 
-      if (messages[messages.length - 1].ans !== "") {
-        const title = messages[0].que
+        // if (messages[messages.length - 1].ans !== "") {
+        //   const title = messages[0].que
 
-        localStorage.setItem(chatId, JSON.stringify({
-          title: title,
-          messages: messages
-        }))
+        //   localStorage.setItem(chatId, JSON.stringify({
+        //     title: title,
+        //     messages: messages
+        //   }))
+        // }
+      }else{
+        
       }
-    }else{
-      if(chatId){
-        if (localStorage.getItem(chatId)) {
-        setMessages(JSON.parse(localStorage.getItem(chatId)).messages)
-      } else {
-        navigate('/chat', {
-          replace: true
-        })
-      }
-      }
-    }
   },
     [messages])
 
@@ -132,12 +219,6 @@ export default function Search(props) {
   }
 
   const handleBtnClick = async (e) => {
-
-    if (!chatId) {
-      const newId = getRandomString(8)
-      navigate(`/chat/${newId}`)
-      localStorage.setItem('lastOpened', newId)
-    }
 
     const history = []
 
@@ -158,28 +239,26 @@ export default function Search(props) {
       )
     })
 
-    setMessages([...messages,
-      {
-        que: question,
-        ans: ""
-      }]
-    )
+    setMessages([...messages, {que: question, ans: ""}])
 
 
-    const inputBox = inputBoxRef.current
+    {const inputBox = inputBoxRef.current
     inputBox.value = ""
     inputBox.rows = inputBox.value.split('\n').length;
     inputBox.style.height = 'auto';
     inputBox.style.height = inputBox.scrollHeight + 'px';
-    setBtnState(false)
+    setBtnState(false)}
 
-    const response = await getResult(history, question, lang, resType)
+    (async () => {
+      const response = await getResult(history, question, lang, resType)
+      setMessages((prevMessages)=> {
+        const updatedMessages = [...prevMessages]
+        updatedMessages[updatedMessages.length - 1].ans = response
+        return updatedMessages
+      })
+    })()
 
-    setMessages((prevMessages)=> {
-      const updatedMessages = [...prevMessages]
-      updatedMessages[updatedMessages.length - 1].ans = response
-      return updatedMessages
-    })
+    
 
   }
 
@@ -286,19 +365,7 @@ export default function Search(props) {
     setTempLang(languages[index])
   }
 
-  const ifCancel = (dType) => {
-    if (dType === 'lang') {
-      setShowDialogBox(false)
-      setTimeout(()=> {
-        setShowLangDialog(false)
-      }, 200)
-    } else if (dType === 'type') {
-      setShowDialogBox(false)
-      setTimeout(()=> {
-        setShowTypeDialog(false)
-      }, 200)
-    }
-  }
+  
 
   const ifConfirm = (dType) => {
     if (dType === 'lang') {
@@ -326,30 +393,43 @@ export default function Search(props) {
 
   return(
     <>
-      <Header />
       <div className="search" ref={searchDivRef}>
-        {
-        messages.map((message, index) =>
-          <div key={index} ref={ index === messages.length - 1 ? lastElement: null } className="responseDiv">
-            <h1>{message.que}</h1>
-            <div id="response"
-              >
-              {
-              message.ans !== "" ?
-              message.ans:
-              <div className='loadingBars'>
-                <div className='loadingBar' />
-                <div className='loadingBar' />
-                <div className='loadingBar' />
+        <div className="header">
+          {/* <SmallBtn icon={"arrow_back"} onClick={()=> navigate("/", {replace: true})} />
+          <h2>Title here...</h2> */}
+
+          <h1>Que AI</h1>
+        </div>
+        <div className="responses">
+          {
+            messages.map((message, index) =>
+              <div key={index} ref={ index === messages.length - 1 ? lastElement: null } className="responseDiv">
+                <h1>{message.que}</h1>
+                <div className='line' ></div>
+                <div id="response"
+                  >
+                  {
+                  message.ans && message.ans !== "" ?
+                    (
+                      <><p>{message.ans}</p>
+                      <div className='line' ></div></>
+                    )
+                    : 
+                  (
+                    <div className='loadingBars'>
+                      <div className='loadingBar' />
+                      <div className='loadingBar' />
+                      <div className='loadingBar' />
+                    </div>
+                  )
+                  }
+                </div>
               </div>
-              }
-            </div>
-          </div>
-        )
-        }
-
-
-        {
+            )
+          }
+        </div>
+        
+     {
         showLangDialog === true &&
         <Dialog
           type={'selection'}
@@ -376,7 +456,7 @@ export default function Search(props) {
             }
           </ul>
         </Dialog>
-        }
+        } 
 
         {
         showTypeDialog === true &&
@@ -427,7 +507,9 @@ export default function Search(props) {
       </Dialog>
       }
 
-      <div className='searchBoxContainer'>
+
+
+
         <div className="searchBox">
           <div className='searchBoxInputContainer'>
             <textarea
@@ -469,9 +551,8 @@ export default function Search(props) {
           </div>
         </div>
 
-      </div>
-      <div ref={scrollEndRef} />
     </div>
   </>
 )
 }
+

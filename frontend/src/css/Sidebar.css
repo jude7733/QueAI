@@ -1,0 +1,259 @@
+
+.recents h1{
+  font-family: GeneralSans-Medium;
+  foont-weight: 400;
+}
+
+
+
+.recentsContainer{
+    height: 100%;
+    overflow-y: scroll;
+}
+.newChatButton{
+    width: 100%;
+    background-color: var(--dialog-bg);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    column-gap: 10px;
+    padding: 10px 10px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.newChatButton:hover{
+    filter: brightness(1.2);
+}
+.newChatButton span{
+    margin: 0;
+    transform: scale(0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+.newChatButton p{
+    margin: 0;
+}
+.loading{
+    height: 60%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;;   
+}
+.nochat{
+    opacity: 0.5; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.sidebarButton{
+    max-width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+.sidebarButton:hover{
+    background-color: #212121;
+}
+
+
+
+.sidebarButton span{
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* position above the button */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+.tooltip-wrapper:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+.sidebarHeader{
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
+.sidebarHeader div{
+    flex: 1;
+}
+.sidebarHeader div:nth-child(2){
+    display: flex;
+    justify-content: center;
+    
+}
+.sidebarHeader div:nth-child(2) p{
+    font-family: GeneralSans-Medium;
+    opacity: 0;
+}
+
+.sidebarHeader div:nth-child(3){
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebarHeader h1{
+    font-family: GeneralSans-Medium;
+}
+
+.sidebarFooter{
+    position: absolute;
+    bottom: 10px;
+    height: 55px;
+    width: 90%;
+    border-radius: 10px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    
+    background-color: var(--dialog-bg);
+}
+
+.sidebarFooter .profileContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    cursor: pointer;
+}
+
+.sidebarFooter .profileContainer img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.sidebarFooter .infoContainer{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 10px;
+}
+
+
+
+
+@media screen and (min-width: 768px) {
+    .sidebar{
+        padding: 0 15px;
+        background-color: var(--header-onscroll);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        z-index: 1000;
+        transition: width 0.5s ease-in;
+    }
+    #sideCont.collapsed .recents h1{
+        width: 0;
+        overflow: hidden;
+        transition: width 300ms ease;
+    }
+    #sideCont.collapsed .newChatButton p{
+        width: 0;
+        overflow: hidden;
+        transition: width 300ms ease;
+    }
+    #sideCont.collapsed .newChatButton{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        gap: 0;
+       
+    }
+    #sideCont.collapsed .sidebarHeader{
+        display: flex;
+        align-items: center;
+        transition: flex 300ms ease;
+    }
+
+    #sideCont.collapsed .sidebarHeader div:nth-child(3){
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+    #sideCont.collapsed .sidebarHeader div:nth-child(3) div:nth-child(1){
+        display: none;
+    }
+    #sideCont.collapsed .sideHeadCols:nth-child(2){
+        display: none;
+        flex: 0;
+    }
+    #sideCont.collapsed .sideHeadCols:nth-child(1){
+        display: none;
+        flex: 0;
+    }
+    #sideCont.collapsed .profileContainer{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #sideCont.collapsed .infoContainer{
+        display: none;
+    }
+    #sideCont.collapsed .recentsContainer{
+       width: 0;
+       overflow: hidden;
+    }
+    #sideCont.collapsed .settingsContainer{
+       width: 0;
+       overflow: hidden;
+    }
+    #sideCont.collapsed .sidebarFooter{
+        padding: 0;
+        width: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background-color: transparent;
+        gap: 0;
+    }
+    #sideCont.collapsed .sidebar{
+       padding: 0 10px; 
+    }
+    .recents{
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+}

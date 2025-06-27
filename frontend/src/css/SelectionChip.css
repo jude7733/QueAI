@@ -12,6 +12,7 @@
   background: #272e45;
   border-radius: 10px;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .chip span{

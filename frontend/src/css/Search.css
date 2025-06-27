@@ -2,7 +2,13 @@
   height: 100%;
   width: 100%;
   overflow-y: scroll;
-  padding: 60px 15px 300px;
+  padding: 60px 15px 0px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 30px 30px 0 0;
 }
 
 @media (min-width: 768px){
@@ -11,13 +17,19 @@
   }
 }
 
-.responseDiv{
+.responses{
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  color: var(--text-color);
+  font-family: customFonts;
+  scroll-behavior: smooth;
   padding: 10px 0;
   display: flex;
   flex-direction: column;
   gap: 15px;
-  sscroll-margin-top:20px;
+  padding: 50px 0 150px 0;
+  overflow-y: scroll;
 }
 .responseDiv img{
   width: 100%;
@@ -29,6 +41,16 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
+.responseDiv:last-child{
+  margin-bottom: 40%;
+}
+.line{
+  width: 100%;
+  height: 0.08px;
+  background-color: grey;
+  opacity: 0.5;
+  margin-top: 10px;
+}
 #response{
   font-family: customFonts;
   max-width: 100%;
@@ -37,4 +59,27 @@
   font-size: 1em;
   overflow-y: hidden;
   pointer-events: none;
+  padding: 10px 0;
+}
+
+.header{
+  height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(5px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  overflow: hidden;
+  padding: 0 30px;
+}
+
+.header h1{
+  font-family: GeneralSans-Medium;
 }

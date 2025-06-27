@@ -34,6 +34,7 @@
 
 .navitem.active p{
   color: #738ee6;
+  font-weight: 800;
 }
 
 .navitem p{

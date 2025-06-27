@@ -1,11 +1,12 @@
 .searchBoxContainer{
   width: 100%;
   padding: 0 15px;
-  position: fixed;
+  position: relative;
   bottom: 90px;
   right: 0;
   display: flex;
   justify-content: center;
+  ddisplay: none;
 }
 
 @media (min-width: 768px){
@@ -18,6 +19,7 @@
 
 .searchBox{
   width: 100%;
+  max-width: 700px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -27,7 +29,21 @@
   padding: 10px;
   margin-top: 0px;
   transition: border-radius 0.2s ease-in-out;
+  position: relative;
+  left: 0;
+  bottom: 0;
 }
+
+.search .searchBox{
+  position: fixed;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  width: 90%;
+}
+
+
+
 .searchBoxInputContainer{
   padding-top: 10px;
   width: 100%;
@@ -53,15 +69,20 @@
   border: none;
   background: transparent;
   font-size: 16px;
-  font-family: customFonts;
+  font-family: GeneralSans-Regular;
   padding: 0 10px;
   max-height: 120px;
   word-wrap: break-word;
   resize: none;
   display: flex;
   align-items: center;
+  cursor: text;
 }
 
 .blank{
   flex: 1;
+}
+
+.searchBox .smallBtn{
+  background: rgba(40,57,70,1);
 }
