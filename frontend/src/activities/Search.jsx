@@ -45,15 +45,19 @@ const getResult = async (history, prompt, lang, resType) => {
 
 export default function Search(props) {
 
+  const location = useLocation()
+
+  const { message, searchLang, searchMode } = location.state || {};
+
   const responseRef = useRef(null)
   const [showDialogBox,
     setShowDialogBox] = useState(false)
   const [lang,
     setLang] = useState('English')
   const [tempLang,
-    setTempLang] = useState('English')
+    setTempLang] = useState(searchLang || "English")
   const [tempResType,
-    setTempResType] = useState('Balanced')
+    setTempResType] = useState(searchMode || 'Balanced')
   const [resType,
     setResType] = useState('Balanced')
   const [btnState,
@@ -71,7 +75,15 @@ export default function Search(props) {
   const [showTypeDialog,
     setShowTypeDialog] = useState(false)
 
-  const location = useLocation()
+  
+
+  
+   useEffect(() => {
+    setLang(searchLang);
+    setResType(searchMode);
+  }, [searchLang, searchMode])
+
+
   const {state} = useLocation()
   const navigate = useNavigate()
 
@@ -82,6 +94,7 @@ export default function Search(props) {
   const lastElement = useRef(null)
   const searchDivRef = useRef(null)
 
+  
 
   const ifCancel = (dType) => {
     if (dType === 'lang') {
@@ -112,8 +125,9 @@ export default function Search(props) {
 
     if (savedData.messages && savedData.messages[0] && savedData.messages[0].ans === null) {
       const msg = savedData.messages[0];
-      console.log("Running async function to get answer...");
       
+      console.log(searchLang);
+
       (async () => {
         const result = await getResult(
           [
@@ -127,8 +141,8 @@ export default function Search(props) {
             }
           ],
           msg.que,
-          "English",
-          "Fast"
+          lang,
+          resType
         )
 
 
@@ -141,7 +155,6 @@ export default function Search(props) {
         // Update UI
         setMessages(updatedMessages)
       })()
-
       
     } else if (savedData.messages) {
       setMessages(savedData.messages)
@@ -192,7 +205,8 @@ export default function Search(props) {
 
       //   scrollEnd.style.height = `${parentHeight - node.offsetHeight - 365 }px`
       // }
-      // node.scrollIntoView(true)
+
+      if(messages[messages.length - 1].ans == "" && node) node.scrollIntoView(true)
 
 
         // if (messages[messages.length - 1].ans !== "") {
@@ -412,6 +426,33 @@ export default function Search(props) {
                   message.ans && message.ans !== "" ?
                     (
                       <><p>{message.ans}</p>
+                      <div className="actions">
+                        <div className="bigActions">
+                          <div className="actionBtn action-share">
+                            <span className="material-symbols-outlined">ios_share</span>
+                            <p>Share</p>
+                          </div>
+                          <div className="actionBtn actionExport">
+                            <span className="material-symbols-outlined">save_alt</span>
+                            <p>Export</p>
+                          </div>
+                        </div>
+                        <div className="quickActions">
+                          <div className="actionBtn action-like">
+                            <span className="material-symbols-outlined">thumb_up</span>
+                          </div>
+                          <div className="actionBtn action-dislike">
+                            <span className="material-symbols-outlined">thumb_down</span>
+                          </div>
+                          <div className="actionBtn action-copy">
+                            <span className="material-symbols-outlined">content_copy</span>
+                          </div>
+                          <div className="actionBtn actionMenu">
+                            <span className="material-symbols-outlined">more_horiz</span>
+                          </div>
+                        </div>
+                        
+                      </div>
                       <div className='line' ></div></>
                     )
                     : 

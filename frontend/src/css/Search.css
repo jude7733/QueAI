@@ -42,16 +42,17 @@
   margin-top: 10px;
 }
 .responseDiv:last-child{
-  margin-bottom: 40%;
+  margin-bottom: 20%;
 }
 .line{
   width: 100%;
   height: 0.08px;
   background-color: grey;
-  opacity: 0.5;
-  margin-top: 10px;
+  opacity: 0.2;
+  margin: 20px 0;
 }
 #response{
+  margin-top: 10px;
   font-family: customFonts;
   max-width: 100%;
   white-space: pre-wrap;
@@ -60,6 +61,10 @@
   overflow-y: hidden;
   pointer-events: none;
   padding: 10px 0;
+}
+.responseDiv h1{
+  position: sticky;
+  top: -10px;
 }
 
 .header{
@@ -82,4 +87,81 @@
 
 .header h1{
   font-family: GeneralSans-Medium;
+}
+
+
+
+.actions{
+  margin-top: 20px;
+  margin-bottom: 40px;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: ;
+}
+
+.actions .bigActions{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 3;
+}
+
+.actions .bigActions .actionBtn{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background-color 0.3s ease;
+}
+
+.bigActions .actionBtn span{
+  font-size: 1.1em;
+}
+
+.bigActions .actionBtn p{
+  font-size: 0.8em;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.actions .bigActions .actionBtn:hover{
+  background-color: var(--header-onscroll);
+}
+
+.actions .quickActions{
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 10px;
+  flex: 1;
+}
+
+.actions .quickActions .actionBtn{
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background-color 0.3s ease;
+}
+
+.quickActions .actionBtn span{
+  font-size: 1.1em;
+  margin: 0;
+  padding: 0;
+
+}
+
+.quickActions .actionBtn:hover{
+  background-color: var(--header-onscroll);
 }

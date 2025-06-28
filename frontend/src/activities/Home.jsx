@@ -74,8 +74,8 @@ export default function Home() {
   }, [()=> clearTimeout()])
   
   const [searchText, setSearchText] = useState('')
-  const [searchLang, setSearchLang] = useState('')
-  const [searchMode, setSearchMode] = useState('')
+  const [searchLang, setSearchLang] = useState('English')
+  const [searchMode, setSearchMode] = useState('Balanced')
   
   const [showLoading, setShowLoading] = useState(true)
   const [emptyChats, setEmptyChats] = useState(false)
@@ -112,7 +112,7 @@ export default function Home() {
     Home.classList.add('exit')
     
     setTimeout(()=>{
-      navigate(`/chat/${newId}`, { state: { message: text  }, viewTransition: true })
+      navigate(`/chat/${newId}`, { state: { message: text, searchLang: searchLang, searchMode: searchMode }, viewTransition: true })
       
     }, 250)
   }

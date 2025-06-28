@@ -146,6 +146,8 @@ export default function SearchBox(props) {
   const ifConfirm = (dType) => {
     if (dType === 'lang') {
       setSearchLang(tempSearchLang)
+      const handleLang = props.onLang
+      handleLang(tempSearchLang)
       setShowDialogBox(false)
       setTimeout(()=> {
         setShowLangDialog(false)
