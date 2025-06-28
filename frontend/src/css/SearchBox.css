@@ -24,7 +24,7 @@
   flex-direction: column;
   gap: 20px;
   align-items: center;
-  background: var(--search-bg);
+  background: var(--search-bg) !important;
   border-radius: 20px;
   padding: 10px;
   margin-top: 0px;
@@ -32,6 +32,9 @@
   position: relative;
   left: 0;
   bottom: 0;
+  z-index: 1;
+
+  
 }
 
 .search .searchBox{
@@ -86,3 +89,4 @@
 .searchBox .smallBtn{
   background: rgba(40,57,70,1);
 }
+

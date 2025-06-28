@@ -34,11 +34,18 @@ export default function Recents() {
       </div>
       <div className="recents">
           <h1>Recents</h1>
-          { window.innerWidth > 768 &&
+          { window.innerWidth > 768 && 
+          <>
+          <div className="chatSearchBox">
+            <span className='material-symbols-outlined'>search</span>
+            <input type="text" name="chatSearch" id="chatSearch" placeholder="Type ' / ' to search chats" />
+          </div>
             <div className='newChatButton'>
               <span className='material-symbols-outlined'>add</span>
               <p>New Chat</p>
-            </div>}
+            </div>
+          </>
+            }
           <div className="recentsContainer" >
             <div className='loading'>
                 { showLoading && 
