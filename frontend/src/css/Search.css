@@ -11,13 +11,9 @@
   border-radius: 30px 30px 0 0;
 }
 
-@media (min-width: 768px){
-  .search{
-    padding-top: 20px;
-  }
-}
 
 .responses{
+  position: relative;
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
@@ -42,7 +38,9 @@
   margin-top: 10px;
 }
 .responseDiv:last-child{
-  margin-bottom: 20%;
+  min-height: 100% ;
+  
+  padding-bottom: 400px;
 }
 .line{
   width: 100%;
@@ -61,10 +59,18 @@
   overflow-y: hidden;
   pointer-events: none;
   padding: 10px 0;
+  position: relative;
+}
+.responseDiv{
+  position: relative;
 }
 .responseDiv h1{
   position: sticky;
   top: -10px;
+  z-index: 2;
+  width: 100%;
+  overflow: auto;
+  
 }
 
 .header{
@@ -72,8 +78,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 10px;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
   position: absolute;
   top: 0;
   left: 0;
@@ -81,8 +86,77 @@
   height: 60px;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
-  overflow: hidden;
-  padding: 0 30px;
+  padding: 0 10px;
+  z-index: 100;
+}
+
+
+.headRow:first-child{
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.headRow:last-child{
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  position: relative;
+}
+
+.more-btn{
+  display: flex;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  position: relative;
+  pointer-events: auto;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.more-btn:hover{
+  background-color: var(--header-onscroll);
+}
+
+.more-btn:hover .options{
+  display: flex;
+}
+
+.options{
+  padding: 5px;
+  background-color: var(--dialog-bg);
+  border-radius: 10px;
+  position: absolute;
+  top: 40px;
+  right: 0;
+  z-index: 1000;
+  display: none;
+}
+
+.option{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  position: relative;
+  pointer-events: auto;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+
+.option:hover{
+  background-color: var(--header-onscroll);
+}
+
+.option span{
+  font-size: 16px;
+}
+
+.option p{
+  font-size: 14px;
+  font-family: GeneralSans-Regular;
 }
 
 .header h1{
@@ -159,9 +233,19 @@
   font-size: 1.1em;
   margin: 0;
   padding: 0;
-
+  
 }
 
 .quickActions .actionBtn:hover{
   background-color: var(--header-onscroll);
+}
+
+
+@media (min-width: 768px){
+  .search{
+    padding-top: 20px;
+  }
+  .header{
+    padding: 0 30px;
+  }
 }

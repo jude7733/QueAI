@@ -62,6 +62,7 @@ export default function Search(props) {
     setResType] = useState('Balanced')
   const [btnState,
     setBtnState] = useState(false)
+    const [moreOptionState,setMoreOptionState] = useState(false)
   const [question,
     setQuestion] = useState("")
   const [spanHeight,
@@ -409,10 +410,22 @@ export default function Search(props) {
     <>
       <div className="search" ref={searchDivRef}>
         <div className="header">
-          {/* <SmallBtn icon={"arrow_back"} onClick={()=> navigate("/", {replace: true})} />
-          <h2>Title here...</h2> */}
-
-          <h1>Que AI</h1>
+          <div className="headRow">
+            <SmallBtn icon={"arrow_back"} onClick={()=> navigate("/", {replace: true})} />
+            
+          </div>
+          <div className="headRow">
+            <div className="more-btn">
+              <span className="material-symbols-outlined">more_horiz</span>
+              <div className="options">
+                <div className="option">
+                  <span className="material-symbols-outlined">delete</span>
+                  <p>Delete</p>
+                </div>
+              </div>
+            </div>
+            
+          </div>
         </div>
         <div className="responses">
           {
