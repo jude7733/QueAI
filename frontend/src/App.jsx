@@ -52,30 +52,13 @@ function App() {
         ):
         (
           <>
-            <main style={{
-              display: "flex"
-            }}>
-              <div id='sideCont'className={collapsed && 'collapsed'} style={{
-                width: collapsed ? "70px" : "400px", 
-                transition: "width 300ms ease"
-              }}>
-                <Sidebar />
-              </div>
-              <div style={{
-                marginTop: "10px",
-                marginRight: "10px",
-                width: '100%',
-                borderRadius: "30px 30px 0 0",
-                backgroundColor: "var(--main-bg)",
-              }}>
-                <Routes>
+            <main>
+              <Routes>
                   <Route path='/' element={<Home />} isActive={ location.pathname === '/' ? true: false } />
                   <Route path='/chat/:chatId?' element={<Search />} />
                   <Route path='/apps' element={<Apps />} />
                   <Route path='/settings' element={<Settings />} />
                 </Routes>
-              </div>
-              
             </main>
           </>
         )

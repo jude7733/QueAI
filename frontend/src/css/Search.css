@@ -38,9 +38,11 @@
   margin-top: 10px;
 }
 .responseDiv:last-child{
-  min-height: 100% ;
-  
-  padding-bottom: 400px;
+  min-height: 100%;
+}
+
+.responseDiv:last-child #response{
+  padding-bottom: 150px;
 }
 .line{
   width: 100%;
@@ -60,16 +62,31 @@
   pointer-events: none;
   padding: 10px 0;
   position: relative;
+  
 }
+
+
+.resans{
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+.responseDiv p{
+
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0;
+  cursor: text;
+  pointer-events: auto;
+
+}
+
 .responseDiv{
   position: relative;
 }
 .responseDiv h1{
-  position: sticky;
-  top: -10px;
-  z-index: 2;
-  width: 100%;
-  overflow: auto;
+
   
 }
 
@@ -248,4 +265,10 @@
   .header{
     padding: 0 30px;
   }
+}
+
+
+
+.bottom-spacer {
+  height: 1000px; /* Enough to avoid overlay by search box */
 }

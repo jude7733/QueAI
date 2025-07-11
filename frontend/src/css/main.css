@@ -13,6 +13,11 @@
   -ms-overflow-style: none;
   scrollbar-width: none; 
   cursor: default;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 *::-webkit-scrollbar {
   display: none;
@@ -24,29 +29,29 @@ h1, h2, h3, h4, h5, h6, p, span{
   pointer-events: none;
 }
 html{
-  height: 100vh;
+  height: 100%;
   width: 100%;
   scroll-behavior: smooth;
 }
 body{
   height: 100%;
   width: 100%;
-  overflow-y: hidden !important;
   font-family: GeneralSans-Regular;
-  background: var(--main-bg);
   display: flex;
   flex-direction: column;
+  overflow-y: hidden;
 }
 main{
   height: 100%;
   width: 100%;
-  overflow-y: hidden;
+  position: relative;
+  overflow-y: scroll;
 }
 
 @media (min-width: 768px){
   main{
     padding-top: 0;
     ppadding-left: 80px;
-    background-color: var(--header-onscroll);
+    
   }
 }

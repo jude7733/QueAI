@@ -481,8 +481,7 @@ export default function Search(props) {
               </div>
             )
           }
-        </div>
-        
+        </div>        
      {
         showLangDialog === true &&
         <Dialog

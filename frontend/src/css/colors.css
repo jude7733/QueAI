@@ -2,10 +2,12 @@
   --main-bg: #101218;
   --main-text: #f0f0f0;
   --header-onscroll: #1A1B21;
-  --button-bg: #26272B;
+  --button-bg: #202742;
   --button-onhover: #1E2023;
   --menu-bg: #282a2d;
   --menu-item-onhover: #393b3d;
   --search-bg: #242834;
   --dialog-bg: #1A1F2F;
+  
+  --button-active: #10257a;
 }
