@@ -1,7 +1,8 @@
 import {
   useState,
   useRef,
-  useEffect
+  useEffect,
+  forwardRef
 } from 'react'
 import {
   useNavigate
@@ -11,10 +12,24 @@ import SmallBtn from "./SmallBtn.jsx"
 import Dialog from '../components/Dialog.jsx'
 import SelectionChip from '../components/SelectionChip.jsx'
 
-export default function SearchBox(props) {
+
+const SearchBox = forwardRef(({
+  handleInputChange,
+  handleButtonClick,
+  onKeyDown,
+  placeHolder,
+  value,
+  answering = false,
+  focus = false,
+  onLangChanged,
+  inputRef,
+  btnState,
+  animactive = false,
+  handleOnFocus,
+  responseRef,
+  onLang,
+}, ref) => {
   const navigate = useNavigate()
-  const [btnState,
-    setBtnState] = useState(false)
   const [rows,
     setRows] = useState(1)
   const [showDialogBox,
@@ -125,17 +140,6 @@ export default function SearchBox(props) {
     "Zamboangueño Chavacano",
     "Zulu"
   ]
-
-
-
-
-  
-
-
-
-    
-
-    
     
   const ifCancel = (dType) => {
     if (dType === 'lang') {
@@ -154,7 +158,7 @@ export default function SearchBox(props) {
   const ifConfirm = (dType) => {
     if (dType === 'lang') {
       setSearchLang(tempSearchLang)
-      const handleLang = props.onLang
+      const handleLang = onLangChanged
       handleLang(tempSearchLang)
       setShowDialogBox(false)
       setTimeout(()=> {
@@ -170,8 +174,6 @@ export default function SearchBox(props) {
 
   }
     
-    
-    
   const showDialog = (d) => {
     if (d === 'lang')
       setShowLangDialog(true)
@@ -179,27 +181,23 @@ export default function SearchBox(props) {
       setShowTypeDialog(true)
   }
   
-  
-  
-  
-
   const inputBoxRef = useRef(null)
   const searchBoxRef = useRef(null)
   
   useEffect(()=>{
-    if(props.focus) inputBoxRef.current.focus()
+    if(focus) inputRef.current.focus()
   }, [])
   
-  const handleInputChange = (event) => {
-    props.onChange(event)
-    const inputBox = inputBoxRef.current
-    const searchBox = searchBoxRef.current
-    inputBox.rows = inputBox.value.split('\n').length;
-    inputBox.style.height = 'auto';
-    inputBox.style.height = inputBox.scrollHeight + 'px';
-    setBtnState(inputBox.value.length > 0)
+  // const handleInputChange = (event) => {
+  //   props.onChange(event)
+  //   const inputBox = inputBoxRef.current
+  //   const searchBox = searchBoxRef.current
+  //   inputBox.rows = inputBox.value.split('\n').length;
+  //   inputBox.style.height = 'auto';
+  //   inputBox.style.height = inputBox.scrollHeight + 'px';
+  //   setBtnState(inputBox.value.length > 0)
     
-  }
+  // }
   
 
  /* const handleBtnClick = () => { 
@@ -247,62 +245,64 @@ export default function SearchBox(props) {
             }
           </ul>
         </Dialog>
-        }
+    }
     
     
-    <div className="searchBox" ref={searchBoxRef}>
+    <div className={`searchBox ${animactive && "active"}`} ref={ref} onClick={()=> inputRef.current.focus()}>
       <div className='searchBoxInputContainer'>
         <textarea
           type="text"
           rows="1"
-          placeholder={props.placeHolder}
+          placeholder={placeHolder}
           id="promptText"
-          ref={inputBoxRef}
+          ref={inputRef}
+          onFocus={handleOnFocus}
           onChange={handleInputChange}
-          value={props.value}
-
+          value={value}
           onKeyDown={e => {
             if (e.key === "Enter" && !e.ctrlKey) {
               e.preventDefault();
-              props.onKeyDown();
+              !answering && onKeyDown();
             }
             if (e.key === "Enter" && e.ctrlKey) {
               // Action for Ct
             }
           }}
-          
           />
-        
       </div>
       <div className='searchBoxButtonContainer'>
-        <div className='chipContainer'>
-          
-          <SelectionChip
+        {
+          !animactive &&
+
+          <div className='chipContainer'>
+            <SelectionChip
                 onClick={()=> {
                   showDialog('type')
                   setShowDialogBox(true)
                 }} 
                 icon={'bolt'}
                 body={searchMode} />
-              <SelectionChip
+            <SelectionChip
                 onClick={()=> {
                   showDialog('lang')
                   setShowDialogBox(true)
                 }}
                 icon={'language'}
                 body={searchLang} />
-          
-          
-          
-          <span className='blank' />
+            <span className='blank' />
+          </div>
+        }
+        
         <SmallBtn
-          state={btnState == true ? "active": "inactive"}
+          className={"sendBtn"}
+          state={btnState && !answering ? "active": "inactive"}
           icon={"arrow_upward"}
-          onClick={props.onBtnClick}
+          onClick={handleButtonClick}
           />
-        </div>
       </div>
     </div>
     </>
   )
-}
+})
+
+export default SearchBox

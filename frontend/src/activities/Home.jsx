@@ -9,12 +9,20 @@ import {
 import axios from 'axios'
 
 import { Link } from 'react-router'
+import ReactMarkdown from 'react-markdown';
 import Logo from '../assets/logosmall.png'
 import Gemini from "../assets/gemini.png"
 import '../css/Home.css'
 import SearchBox from '../components/SearchBox.jsx'
-import Sidebar from '../components/Sidebar.jsx'
+import Header from '../components/Header.jsx';
 import profilePic from '../assets/myPic.png'
+import LeftSideBar from '../components/LeftSideBar.jsx';
+import RightSideBar from '../components/RightSideBar.jsx';
+import Settings from './Settings.jsx';
+import Recents from '../components/Recents.jsx';
+import SearchTools from '../components/SearchTools.jsx';
+import Search from './Search.jsx';
+import Result from './Result.jsx';
 
 export default function Home() {
 
@@ -86,6 +94,7 @@ export default function Home() {
   }
 
   const apiEndpoint = "https://queai-backend.vercel.app/api/askai"
+  // const apiEndpoint = "http://localhost:9001/api/askai"
 
 
   const getResult = async (history, prompt, lang, resType) => {
@@ -102,52 +111,6 @@ export default function Home() {
       return null
     }
   }
-
-
-
-
-
-
-
-
-  // useEffect(()=>{
-  //   const Home = HomeRef.current;
-  //   const Title = titleRef.current;
-  //   const SmallTitle = smallTitleRef.current;
-  //   const RecentsTitle = recentsTitle.current;
-  //   const handleScroll = () =>{
-  //     if(Home.scrollTop > 50){
-  //       Title.classList.add('hide')
-  //       Title.classList.remove('show')
-  //       SmallTitle.classList.add('show')
-  //       SmallTitle.classList.remove('hide')
-  //     }else{
-  //       Title.classList.add('show')
-  //       Title.classList.remove('hide')
-  //       SmallTitle.classList.add('hide')
-  //       SmallTitle.classList.remove('show')
-  //     }
-  //     if(Home.scrollTop > 390){
-  //       setSmallTitle("Recents")
-  //       RecentsTitle.classList.add('hide')
-  //       RecentsTitle.classList.remove('show')
-  //     }else{
-  //       setSmallTitle("Home")
-  //       RecentsTitle.classList.add('show')
-  //       RecentsTitle.classList.remove('remove')
-  //     }
-  //   }
-  //   Home.addEventListener("scroll", handleScroll)
-
-  //   return () => Home.removeEventListener("scroll", handleScroll)
-  // }, [])
-
-  // useEffect(()=>{
-  //   setTimeout(()=>{
-  //     setEmptyChats(true)
-  //     setShowLoading(false)
-  //   }, 3000)
-  // }, [()=> clearTimeout()])
 
   const [searchText, setSearchText] = useState('')
   const [searchLang, setSearchLang] = useState('English')
@@ -230,8 +193,6 @@ export default function Home() {
     }]);
 
     setAnswering(true);
-    
-
 
     (async () => {
       const response = await getResult(history, question, searchLang, searchMode)
@@ -243,31 +204,7 @@ export default function Home() {
       })
     })()
 
-
   }
-
-  useEffect(()=>{
-    if(messages[0]){
-      const node = lastElement.current
-      if(messages[messages.length - 1].ans == "" && node) node.scrollIntoView(true)
-
-      if(chatID){
-        localStorage.setItem(chatID, JSON.stringify(messages))
-        localStorage.setItem(messages[0].que, chatID)
-      }else{
-        const chatid = getRandomString(10)
-        setChatID(chatid)
-
-        setChats((prev) => {})
-
-        localStorage.setItem("chats", JSON.stringify(chats) )
-
-        localStorage.setItem(chatid, JSON.stringify(messages))
-        localStorage.setItem(messages[0].que, chatid)
-      }
-    }
-
-  }, [messages])
 
   return (
     <>
@@ -275,297 +212,83 @@ export default function Home() {
         background: !animations && "var(--main-bg)"
       }} >
         <div ref={homeWrapperRef} className="home-wrapper">
-          <div ref={leftSidebarRef} className={`left-sidebar ${!(window.innerWidth < 768) ? (drawerCollapsed && "collapsed") : "closed"}`} style={{
-            display: window.innerWidth < 768 && onSearch ? "none" : "flex",
-            position: window.innerWidth < 768 && "absolute",
-            left: window.innerWidth < 768 && "0",
-            background: (window.innerWidth < 768 || (searched && drawerCollapsed)) && "rgba(13, 13, 15, 0.9)",
-            backdropFilter: window.innerWidth < 768 && "20px",
-            zIndex: "10000",
-
-          }} >
-              <div className="left-sidebar-header">
-                <img src={Logo} alt="logo" />
-                <div className="sidebar-collapse-btn btn"  onClick={()=> {
-                  window.innerWidth > 768 ?
-                  setDrawerCollapsed(!drawerCollapsed)
-                  : leftSidebarRef.current.classList.add("closed")
-                  }} >
-                  <span className="material-symbols-outlined">{drawerCollapsed ? "left_panel_open" : "left_panel_close"}</span>
-                </div>
-              </div>
-              <div className="left-sidebar-body">
-                <div className="new_chat_button">
-                  <span className="material-symbols-outlined">add</span>
-                  <p>New chat</p>
-                </div>
-                <div className="recent-chats">
-                  <h3>Recents</h3>
-                  <div className="recent-chats-container">
-                    {
-                      !isLoggedIn &&
-                      <>
-                        <div className="no-recents">
-                          <span className="material-symbols-outlined">history</span>
-                          <h4>Login to see your recent chats</h4>
-                        </div>
-                      </>
-                    }
-                  </div>
-                </div>
-              </div>
-              <div className="sidebar-footer">
-                    <div className="setting-btn" onClick={()=> setShowSettings(true)}>
-                      <span className="material-symbols-outlined">settings</span>
-                      <p>Settings</p>
-                    </div>
-                </div>
-            </div>
+          <LeftSideBar
+            ref={leftSidebarRef}
+            drawerCollapsed={drawerCollapsed}
+            setDrawerCollapsed={setDrawerCollapsed}
+            searched={searched}
+            onSearch={onSearch}
+            isLoggedIn={isLoggedIn}
+            setShowSettings={setShowSettings}
+          />
             <div ref={homeContainerRef} style={{
               padding: searched ? (window.innerWidth < 768 ? "0" : (drawerCollapsed && searched ? "10px 10px 10px 80px" : "10px 10px 10px 0")) : "150px 0 0"
             }} className="homeContainer" >
-              <div ref={headerRef} className="header" style={{
-                padding: !drawerCollapsed && "0 40px"
-              }}>
-                <div className="firstCol">
-                  {
-                    window.innerWidth < 768 &&
-                    <div className='btn menu-btn' onClick={()=> leftSidebarRef.current.classList.remove("closed")}>
-                      <span className="material-symbols-outlined">menu</span>
-                    </div>
-                  }
-                  <h1>Que AI</h1>
-                </div>
-                <div className="secondCol">
-                  {
-                    !isLoggedIn ?
-                    <div className='login-btns-container'>
-                      <div className="login-btn">
-                        Login
-                      </div>
-                      <div className="signup-btn">
-                        Sign up for free
-                      </div>
-                    </div>
-                    :
-                    <>
-                      <div className="btn recents" title='Recents' onClick={()=> setShowRecents(true)} >
-                        <span className="material-symbols-outlined">history</span>
-                      </div>
-                      <div className="profile-container">
-                        <img src={profilePic} alt="" />
-                      </div>
-                    </>
-                    
-                  }
-                </div>
-              </div>
+              <Header
+                ref={headerRef}
+                drawerCollapsed
+                setDrawerCollapsed
+                leftSidebarRef
+                isLoggedIn
+                setShowRecents
+              />
               <div ref={introRef} className="intro">
                 <h1>Meet Que AI</h1>
                 <p>Your personal AI, ready to help you think better and move faster.</p>
               </div>
-              <div ref={resultRef} className="result">
-                <div className="result-header">
-                  <div className="result-header-left">
-                    <div className="back_btn" onClick={() => {
-                      introRef.current.classList.remove("hide")
-                      toolsRef.current.classList.remove("hide")
-                      headerRef.current.classList.remove("hide")
-                      resultRef.current.classList.remove("show")
-                      leftSidebarRef.current.classList.remove("show")
-                      rightSidebarRef.current.classList.remove("show")
-                      homeContainerRef.current.style.paddingTop = "150px"
-                      searchBoxRef.current.classList.remove('onsearch')
-                      homeContainerRef.current.classList.remove('onsearch')
-                      setSearched(false)
-                    }} >
-                      <span className="material-symbols-outlined">arrow_back</span>
-                    </div>
-                    <h1 ref={resultTitle} ></h1>
-                  </div>
-                  <div className="result-header-right">
-                    <div className="more_btn">
-                      <span className="material-symbols-outlined">more_horiz</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="result-body">
-                  {
-                    messages.map((message, index) =>
-                      <div key={index} ref={index === messages.length - 1 ? lastElement : null} className="responseDiv">
-                        <h1>{message.que}</h1>
-                        <div className='line' ></div>
-                        <div id="response"
-                        >
-                          {
-                            message.ans && message.ans !== "" ?
-                              (
-                                <><p className='resans' >{message.ans}</p>
-                                  <div className="actions">
-                                    <div className="bigActions">
-                                      <div className="actionBtn action-share">
-                                        <span className="material-symbols-outlined">ios_share</span>
-                                        <p>Share</p>
-                                      </div>
-                                      <div className="actionBtn actionExport">
-                                        <span className="material-symbols-outlined">save_alt</span>
-                                        <p>Export</p>
-                                      </div>
-                                    </div>
-                                    <div className="quickActions">
-                                      <div className="actionBtn action-like">
-                                        <span className="material-symbols-outlined">thumb_up</span>
-                                      </div>
-                                      <div className="actionBtn action-dislike">
-                                        <span className="material-symbols-outlined">thumb_down</span>
-                                      </div>
-                                      <div className="actionBtn action-copy">
-                                        <span className="material-symbols-outlined">content_copy</span>
-                                      </div>
-                                      <div className="actionBtn actionMenu">
-                                        <span className="material-symbols-outlined">more_horiz</span>
-                                      </div>
-                                    </div>
-
-                                  </div>
-                                  <div className='line' ></div></>
-                              )
-                              :
-                              (
-                                <div className='loadingBars'>
-                                  <div className='loadingBar' />
-                                  <div className='loadingBar' />
-                                  <div className='loadingBar' />
-                                </div>
-                              )
-                          }
-                        </div>
-                      </div>
-                    )
-                  }
-                </div>
-              </div>
-              
-              <div ref={searchBoxRef} onClick={()=> inputRef.current.focus()} className={`searchbox ${animactive && "active"}`}>
-                {/* <div className="buttonContainer">
-                  <div className={`btn upload ${btnState? "active" : "inactive"}`}>
-                    <span className="material-symbols-outlined">add</span>
-                  </div>
-                </div> */}
-                <div className="inputContainer">
-                  <textarea
-                    ref={inputRef}
-                    onFocus={handleOnFocus}
-                    onChange={onInputChanged}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter' && !event.shiftKey) {
-                        event.preventDefault();
-                        if (btnState) {
-                          handleButtonClick();
-                        }
-                      }
-                    }}
-                    type="text"
-                    rows="1"
-                    placeholder='Ask anything...'
-                  />
-                </div>
-                <div className="buttonContainer">
-                  <div className={`btn send ${!answering && btnState ? "active" : "inactive"}`} onClick={handleButtonClick}>
-                    <span className="material-symbols-outlined">arrow_upward</span>
-                  </div>
-                </div>
-              </div>
-              <div ref={toolsRef} className="toolsContainer">
-                <div className="tool">
-                  <span className='material-symbols-outlined'>draw</span>
-                  <p>Create an image</p>
-                </div>
-                <div className="tool" onClick={()=> {
-                  setQuestion("How do I optimize this Python loop for better performance?")
-                  inputRef.current.value = "How do I optimize this Python loop for better performance?"
-                  inputRef.current.focus()
-                  setBtnState(true)
-                  }}>
-                  <span className='material-symbols-outlined'>code</span>
-                  <p>Write a code</p>
-                </div>
-                <div className="tool" onClick={()=>{
-                  setQuestion("Can you summarise this text for me? ")
-                  inputRef.current.value = "Can you summarise this text for me? "
-                  inputRef.current.focus()
-                  setBtnState(true)
-                }}>
-                  <span className='material-symbols-outlined'>assignment</span>
-                  <p>Summarise text</p>
-                </div>
-                <div className="tool" onClick={()=>{
-                  setQuestion("Can you help me write a short story about a brave knight?")
-                  inputRef.current.value = "Can you help me write a short story about a brave knight?"
-                  inputRef.current.focus()
-                  setBtnState(true)
-                }} >
-                  <span className='material-symbols-outlined'>ink_pen</span>
-                  <p>Write a story</p>
-                </div>
-                <div className="tool" onClick={()=>{
-                  setQuestion("What are the key concepts in quantum physics?")
-                  inputRef.current.value = "What are the key concepts in quantum physics?"
-                  inputRef.current.focus()
-                  setBtnState(true)
-                }} >
-                  <span className='material-symbols-outlined'>book_2</span>
-                  <p>Learn a topic</p>
-                </div>
-              </div>
-
+              <Result 
+                ref={resultRef}
+                introRef={introRef}
+                toolsRef={toolsRef}
+                headerRef={headerRef}
+                resultTitle={resultTitle}
+                leftSidebarRef={leftSidebarRef}
+                rightSidebarRef={rightSidebarRef}
+                homeContainerRef={homeContainerRef}
+                searchBoxRef={searchBoxRef}
+                setSearched={setSearched}
+                messages={messages}
+                lastElement={lastElement}
+                chatID={chatID}
+                setChatID={setChatID}
+                setChats={setChats}
+                getRandomString={getRandomString}
+                chats={chats}
+              />
+              <SearchBox
+                ref={searchBoxRef}
+                inputRef={inputRef}
+                handleInputChange={onInputChanged}
+                handleOnFocus={handleOnFocus}
+                handleButtonClick={handleButtonClick}
+                btnState={btnState}
+                answering={answering}
+                animactive={animactive}
+                setOnSearch={setOnSearch}
+                searched={searched}
+                placeHolder="Ask anything..."
+                onKeyDown={handleButtonClick}
+                setBtnState={setBtnState}
+                onLangChanged={setSearchLang}
+              />              
+              <SearchTools
+                ref={toolsRef}
+                setQuestion={setQuestion}
+                inputRef={inputRef}
+                setBtnState={setBtnState}
+              />
             </div>
 
-            <div ref={rightSidebarRef} className="right-sidebar">
-                <div className="right-sidebar-header">
-                  <span className="material-symbols-outlined">manage_search</span>
-                  <h3>Related</h3>
-                </div>
-                <div className="right-sidebar-body">
-                  <div className="related-ques">
-                    <ul className="related-ques-list">
-                      <li className="related-ques-item">
-                        <p>What is the current time right now in delhi?</p>
-                        <span className="material-symbols-outlined">arrow_outward</span>
-                      </li>
-                      <li className="related-ques-item">
-                        <p>Who is the chief minister of kerala?</p>
-                        <span className="material-symbols-outlined">arrow_outward</span>
-                      </li>
-                      <li className="related-ques-item">
-                        <p>Whats</p>
-                        <span className="material-symbols-outlined">arrow_outward</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="right-sidebar-footer">
-                    <div className="footer-logo">
-                      <img src={Logo} alt="" />
-                      <p className='logo-txt' >Que AI</p>
-                      <p>Beta &nbsp;v0.1</p>
-                    </div>
-                    <div className="dvlpr">
-                      <p>Designed & Developed by <a href='https://github.com/SafwanKS' onClick={(e)=> {
-                        e.preventDefault()
-                        window.open("https://github.com/SafwanKS")
-                        }}>Safwan KS</a></p>
-                    </div>
-                    <div className="social-media-handle-container">
-                      <div className="github">
-                        
-                      </div>
-                      <div className="instagram"></div>
-                      <div className="gmail"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <RightSideBar
+              ref={rightSidebarRef}
+              drawerCollapsed
+              setDrawerCollapsed
+              searched
+              onSearch
+              isLoggedIn
+              setShowSettings
+              Logo={Logo}
+            />
 
           </div>
 
@@ -578,47 +301,19 @@ export default function Home() {
           </div>
         </div>
         {
-          showSettings &&
-          <div className="settingsContainer">
-            <div className="settings-wrapper">
-              <div className="settings-header">
-                <h2>Settings</h2>
-                <div className="close-btn btn" onClick={() => setShowSettings(false)} >
-                  <span className="material-symbols-outlined">close</span>
-                </div>
-              </div>
-              <div className="settings-body">
-                <div className="settings-item">
-                  <p className="item-name">Animations</p>
-                  <div className={`switch ${animations && "active"}`} onClick={() => setAnimState(!animState)} >
-                    <div className="switch-btn"></div>
-                  </div>
-                </div>
-                <div className="settings-item">
-                  <p className="item-name">Enter is send</p>
-                  <div className={`switch ${animations && "active"}`} onClick={() => setAnimState(!animState)} >
-                    <div className="switch-btn"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          showSettings && 
+          <Settings
+            animations={animations}
+            setShowSettings={setShowSettings} 
+            setAnimState={setAnimState} 
+            animState={animState}
+          />
         }
         {
           showRecents &&
-          <div className="recentsContainer">
-            <div className="recents-wrapper">
-              <div className="recents-header">
-                <h2>Recents</h2>
-                <div className="close-btn btn" onClick={() => setShowRecents(false)} >
-                  <span className="material-symbols-outlined">close</span>
-                </div>
-              </div>
-              <div className="recents-body">
-                jjs
-              </div>
-            </div>
-          </div>
+          <Recents 
+            setShowRecents={setShowRecents}
+          /> 
         }
 
       </div>

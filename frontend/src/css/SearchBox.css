@@ -1,45 +1,73 @@
-.searchBoxContainer{
-  width: 100%;
-  padding: 0 15px;
-  position: relative;
-  bottom: 90px;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  display: none;
-}
 
-@media (min-width: 768px){
-  .searchBoxContainer{
-    width: calc(100% - 90px);
-    left: 90px;
-    bottom: 20px;
-  }
-}
 
 .searchBox{
-  width: 100%;
-  max-width: 700px;
+  width: 90%;
+  height: 110px;
+  max-height: auto;
+  max-width: 600px;
   display: flex;  
   flex-direction: column;
   gap: 20px;
   align-items: center;
-  background: var(--search-bg);
-  border-radius: 20px;
+  border-radius: 30px;
   padding: 10px;
   position: relative;
-  
+  margin: 0 10px;
+  transition: height 0.3s ease, flex-direction 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(200px);
 }
 
 
-.search .searchBox{
+
+.searchBox.active::after, .searchBox.active::before{
+  content: "";
+  position: absolute;
+  height: 105%;
+  width: 101%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50px;
+  background-image: conic-gradient(from var(--angle), transparent 50%, blue);
+  z-index: -1;
+  animation: spinBox 3s linear infinite;
+}
+
+.searchBox.active::after{
+  filter: blur(10px);
+  opacity: 1;
+}
+
+.searchBox .chipContainer{
+  flex: 1;
+  animation: fadein 0.2s ease;
+  height: 40px;
+  
+}
+
+@keyframes fadein {
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+}
+
+.searchBox.active .chipContainer{
+  display: none;
+}
+
+
+.searchBox.onsearch{
   position: fixed;
   left: 50%;
-  bottom: 10px;
+  bottom: 15px;
   transform: translateX(-50%);
   width: 90%;
-  background-color: black;
-
+  z-index: 100000;
+  background-color: var(--dialog-bg);
 }
 
 
@@ -51,6 +79,7 @@
 }
 .searchBoxButtonContainer{
   width:100%;
+  display: flex;
 }
 @media (min-width: 768px){
   .searchBox{
@@ -86,3 +115,44 @@
   background: rgba(40,57,70,1);
 }
 
+.searchBox.active{
+  flex-direction: row;
+  align-items: center;
+  height: 70px;
+  border-radius: 50px;
+  background: var(--dialog-bg);
+  transition: height 0.3s ease;
+  backdrop-filter: none;
+}
+
+
+.searchBox.active .searchBoxInputContainer{
+  flex: 1;
+  align-items: center;
+  padding-top: 0;
+}
+
+.searchBox.active .searchBoxButtonContainer{
+  width: auto;
+}
+
+
+.searchBox .sendBtn{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+
+  background-color: rgba(255, 255, 255, 0.05) ;
+  backdrop-filter: blur(10px);
+}
+
+.searchBox.active .sendBtn{
+  bottom: 15px;
+}
+
+
+
+
+.searchBox.onsearch .chip{
+  background:  #272e45;;
+}

@@ -353,9 +353,6 @@
   }
 }
 
-
-
-
 @keyframes spinBox{
   0%{
     --angle: 0deg;
@@ -709,4 +706,21 @@
 
 .signup-btn:hover{
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+
+.markdown-output h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.markdown-output h2 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+}
+
+.markdown-output h3 {
+  font-size: 1.2rem;
+  margin-top: 0.8rem;
 }
