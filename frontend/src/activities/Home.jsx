@@ -64,6 +64,7 @@ export default function Home() {
   const [messages, setMessages] = useState([])
 
   const [question, setQuestion] = useState()
+  const [placeHolder, setPlaceHolder] = useState("")
 
   const [onSearch, setOnSearch] = useState(false)
 
@@ -71,7 +72,8 @@ export default function Home() {
 
   const [chatID, setChatID] = useState("")
   const [isLoggedIn, setLoginState] = useState(false)
-
+  const [toolMode, setToolMode] = useState(false)
+  const [toolName, setToolName] = useState("")
 
   const [chats, setChats] = useState({})
   const [chatNames, setChatNames] = useState({})
@@ -131,15 +133,7 @@ export default function Home() {
     setQuestion(e.target.value)
   }
 
-  const handleOnFocus = (e) => {
-    // const searchBox = searchBoxRef.current
-    // if(!e.target.focus){
-    //   searchBox.style.borderRadius = "25px"
-    // }else{
-    //   searchBox.style.borderRadius = "50px"
-    // }
-    setAnimactive(false)
-  }
+  
 
 
   const handleButtonClick = () => {
@@ -154,6 +148,7 @@ export default function Home() {
       rightSidebarRef.current.classList.add("show")
       homeWrapperRef.current.style.paddingTop = "0"
       searchBoxRef.current.classList.add('onsearch')
+      searchBoxRef.current.classList.remove('active')
       homeContainerRef.current.classList.add('onsearch')
       setDrawerCollapsed(true)
       setOnSearch(true)
@@ -226,11 +221,11 @@ export default function Home() {
             }} className="homeContainer" >
               <Header
                 ref={headerRef}
-                drawerCollapsed
-                setDrawerCollapsed
-                leftSidebarRef
-                isLoggedIn
-                setShowRecents
+                drawerCollapsed={drawerCollapsed}
+                setDrawerCollapsed={setDrawerCollapsed}
+                leftSidebarRef={leftSidebarRef}
+                isLoggedIn={false}
+                setShowRecents={setShowRecents}
               />
               <div ref={introRef} className="intro">
                 <h1>Meet Que AI</h1>
@@ -259,23 +254,29 @@ export default function Home() {
                 ref={searchBoxRef}
                 inputRef={inputRef}
                 handleInputChange={onInputChanged}
-                handleOnFocus={handleOnFocus}
                 handleButtonClick={handleButtonClick}
                 btnState={btnState}
                 answering={answering}
                 animactive={animactive}
+                setAnimactive={setAnimactive}
                 setOnSearch={setOnSearch}
                 searched={searched}
-                placeHolder="Ask anything..."
+                placeHolder= {`${toolMode ? (toolName === "draw" && "Describe your image" || toolName === "code" && "Write a code for..." || toolName === "summarise" && "Enter text to summarise " || toolName === "story" && "Write a story about..." || toolName === "learn" && "What is the..." ) : "Ask anything..."}`}
                 onKeyDown={handleButtonClick}
                 setBtnState={setBtnState}
                 onLangChanged={setSearchLang}
+                toolMode={toolMode}
+                toolName={toolName}
+                setToolMode={setToolMode}
               />              
               <SearchTools
                 ref={toolsRef}
                 setQuestion={setQuestion}
                 inputRef={inputRef}
                 setBtnState={setBtnState}
+                setToolMode={setToolMode}
+                setToolName={setToolName}
+                setAnimactive={setAnimactive}
               />
             </div>
 
@@ -292,7 +293,7 @@ export default function Home() {
 
           </div>
 
-        <div className={`bg-wrapper ${animations ? "active" : "inactive"}`}>
+        <div className={`bg-wrapper ${toolMode && (toolName == "draw" && "red" || toolName == "code" && "green" || toolName == "summarise" && "blue" || toolName == "story" && "purple" || toolName == "learn" && "yellow" )} ${animations ? "active" : "inactive"}`}>
           <div className="box1">
             <div className="neon1"></div>
           </div>

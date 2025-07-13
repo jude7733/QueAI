@@ -25,9 +25,12 @@ const SearchBox = forwardRef(({
   inputRef,
   btnState,
   animactive = false,
-  handleOnFocus,
+  setAnimactive,
   responseRef,
   onLang,
+  toolMode,
+  toolName, 
+  setToolMode
 }, ref) => {
   const navigate = useNavigate()
   const [rows,
@@ -184,10 +187,6 @@ const SearchBox = forwardRef(({
   const inputBoxRef = useRef(null)
   const searchBoxRef = useRef(null)
   
-  useEffect(()=>{
-    if(focus) inputRef.current.focus()
-  }, [])
-  
   // const handleInputChange = (event) => {
   //   props.onChange(event)
   //   const inputBox = inputBoxRef.current
@@ -248,15 +247,28 @@ const SearchBox = forwardRef(({
     }
     
     
-    <div className={`searchBox ${animactive && "active"}`} ref={ref} onClick={()=> inputRef.current.focus()}>
+    <div className={`searchBox ${toolMode && "toolmode"} ${toolMode && (toolName == "draw" && "red" || toolName == "code" && "green" || toolName == "summarise" && "blue" || toolName == "story" && "purple" || toolName == "learn" && "yellow" )} ${animactive && "active"}`} ref={ref} onClick={()=> inputRef.current.focus()}>
       <div className='searchBoxInputContainer'>
+        {
+          toolMode &&
+          <div className="searchTool">
+            <span className={`${toolName} material-symbols-outlined`}>{toolName == "draw" && "draw" || toolName == "code" && "code" || toolName == "summarise" && "assignment" || toolName == "story" && "ink_pen" || toolName == "learn" && "book_2" }</span>
+            <p>{toolName}</p>
+            <div className="close-btn" onClick={()=> setToolMode(false)}>
+              <span className="material-symbols-outlined">close</span>
+            </div>
+        </div>
+        }
+        
         <textarea
           type="text"
           rows="1"
           placeholder={placeHolder}
           id="promptText"
           ref={inputRef}
-          onFocus={handleOnFocus}
+          onFocus={()=> {
+            if(!toolMode) setAnimactive(false)  
+          }}
           onChange={handleInputChange}
           value={value}
           onKeyDown={e => {

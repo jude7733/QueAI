@@ -111,6 +111,26 @@
   animation: spin 3s linear infinite;
 }
 
+.bg-wrapper.red .neon1::before, .bg-wrapper.red .neon1::after, .bg-wrapper.red .neon2::before, .bg-wrapper.red .neon2::after{
+  background-image: conic-gradient(from var(--angle), transparent 40%, rgb(255, 0, 0));
+}
+
+.bg-wrapper.blue .neon1::before, .bg-wrapper.blue .neon1::after, .bg-wrapper.blue .neon2::before, .bg-wrapper.blue .neon2::after{
+  background-image: conic-gradient(from var(--angle), transparent 40%, rgb(0, 60, 255));
+}
+
+.bg-wrapper.green .neon1::before, .bg-wrapper.green .neon1::after, .bg-wrapper.green .neon2::before, .bg-wrapper.green .neon2::after{
+  background-image: conic-gradient(from var(--angle), transparent 40%, rgb(0, 255, 21));
+}
+.bg-wrapper.purple .neon1::before, .bg-wrapper.purple .neon1::after, .bg-wrapper.purple .neon2::before, .bg-wrapper.purple .neon2::after{
+  background-image: conic-gradient(from var(--angle), transparent 40%, rgb(89, 0, 255));
+}
+
+.bg-wrapper.yellow .neon1::before, .bg-wrapper.yellow .neon1::after, .bg-wrapper.yellow .neon2::before, .bg-wrapper.yellow .neon2::after{
+  background-image: conic-gradient(from var(--angle), transparent 40%, rgb(255, 153, 0));
+}
+
+
 
 .neon1::after, .neon2::after{
   filter: blur(100px);
