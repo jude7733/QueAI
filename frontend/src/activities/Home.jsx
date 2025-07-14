@@ -44,6 +44,8 @@ export default function Home() {
   const rightSidebarRef = useRef(null)
   const introTxt = useRef(null)
   const  searchContainerRef = useRef(null)
+
+  const genImageWrapper = useRef(null)
   
 
   const lastElement = useRef(null)
@@ -57,6 +59,7 @@ export default function Home() {
   const [animations, setAnimations] = useState(true)
   const [showSettings, setShowSettings] = useState(false)
   const [showRecents, setShowRecents] = useState(false)
+  const [showGenImage, setShowGenImage] = useState(false)
   const [drawerCollapsed, setDrawerCollapsed] = useState(true)
 
   const [animState, setAnimState] = useState(true)
@@ -64,6 +67,8 @@ export default function Home() {
   const [searched, setSearched] = useState(false)
 
   const [messages, setMessages] = useState([])
+
+  const [image, setImage] = useState(null)
 
   const [question, setQuestion] = useState()
   const [placeHolder, setPlaceHolder] = useState("")
@@ -83,6 +88,7 @@ export default function Home() {
 
 
 
+
   useEffect(() => {
     setAnimactive(animState)
     setAnimations(animState)
@@ -99,6 +105,8 @@ export default function Home() {
   }
 
   const apiEndpoint = "https://queai-backend.vercel.app/api/askai"
+  const genApiEndpoint = "https://queai-backend.vercel.app/api/genImage"
+  // const genApiEndpoint = "http://localhost:9001/api/genImage"
   // const apiEndpoint = "http://localhost:9001/api/askai"
 
 
@@ -114,6 +122,32 @@ export default function Home() {
     } catch (err) {
       console.log(err)
       return null
+    }
+  }
+
+  const genImage = async(prompt) => {
+    try{
+      const response = await axios.post(genApiEndpoint, {
+        prompt: prompt
+      })
+      const img = response.data
+
+      console.log(img)
+
+      if(img && img.base64Data){
+        setImage(img)
+      }
+
+      // .map(img => ({
+      //   mimeType: img.mimeType,
+      //   base64data: img.base64data
+      // }))
+      
+      // if(imageArray[0]){
+      //   setImage(imageArray[0])
+      // }
+    } catch (err) {
+      console.log("error fetching image: ", err)
     }
   }
 
@@ -162,25 +196,26 @@ export default function Home() {
   //   }
   // }, [toolName])
 
+  useEffect(()=>{
+    console.log("imae updated")
+    console.log(image)
+  }, [image])
+
+  const downloadImage = () =>{
+    if (!image) return;
+
+    const imageName = question.replaceAll(' ', "-")
+
+    const link = document.createElement("a")
+    link.href = `data:${image.mimeType};base64,${image.base64Data}`;
+    link.download = `${imageName}.${image.mimeType.split('/')[1]}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
 
   const handleButtonClick = () => {
-    if (!searched) {
-      setSearched(true)
-      introRef.current.classList.add("hide")
-      toolsRef.current.classList.add("hide")
-      toolsRef.current.classList.add("hide")
-      headerRef.current.classList.add("hide")
-      resultRef.current.classList.add("show")
-      leftSidebarRef.current.classList.add("show")
-      rightSidebarRef.current.classList.add("show")
-      homeWrapperRef.current.style.paddingTop = "0"
-      // searchBoxRef.current.classList.add('onsearch')
-      searchContainerRef.current.classList.add('onsearch')
-      searchBoxRef.current.classList.remove('active')
-      homeContainerRef.current.classList.add('onsearch')
-      setDrawerCollapsed(true)
-      setOnSearch(true)
-    }
 
     const inputBox = inputRef.current
     inputBox.value = ''
@@ -189,44 +224,74 @@ export default function Home() {
     inputBox.style.height = inputBox.scrollHeight + 'px';
     setBtnState(false)
 
+    
 
-    const history = []
+    
 
-    messages.map((message, index)=> {
-      history.push(
-        {
-          role: "user",
-          parts: [{
-            text: message.que
-          }]
-        },
-        {
-          role: "model",
-          parts: [{
-            text: message.ans
-          }]
-        }
-      )
-    });
+    if(!toolMode || toolName !== "draw"){
 
+      if (!searched) {
+        setSearched(true)
+        introRef.current.classList.add("hide")
+        toolsRef.current.classList.add("hide")
+        toolsRef.current.classList.add("hide")
+        headerRef.current.classList.add("hide")
+        resultRef.current.classList.add("show")
+        leftSidebarRef.current.classList.add("show")
+        rightSidebarRef.current.classList.add("show")
+        homeWrapperRef.current.style.paddingTop = "0"
+        // searchBoxRef.current.classList.add('onsearch')
+        searchContainerRef.current.classList.add('onsearch')
+        searchBoxRef.current.classList.remove('active')
+        homeContainerRef.current.classList.add('onsearch')
+        setDrawerCollapsed(true)
+        setOnSearch(true)
+      }
 
-    setMessages([...messages, {
-      que: question,
-      ans: ""
-    }]);
+      const history = []
+  
+      messages.map((message, index)=> {
+        history.push(
+          {
+            role: "user",
+            parts: [{
+              text: message.que
+            }]
+          },
+          {
+            role: "model",
+            parts: [{
+              text: message.ans
+            }]
+          }
+        )
+      });
+  
+  
+      setMessages([...messages, {
+        que: question,
+        ans: ""
+      }]);
+  
+      setAnswering(true);
+  
+      (async () => {
+        const response = await getResult(history, question, searchLang, searchMode)
+        setAnswering(false)
+        setMessages((prevMessages)=> {
+          const updatedMessages = [...prevMessages]
+          updatedMessages[updatedMessages.length - 1].ans = response      
+          return updatedMessages
+        })
+      })()
 
-    setAnswering(true);
-
-    (async () => {
-      const response = await getResult(history, question, searchLang, searchMode)
-      setAnswering(false)
-      setMessages((prevMessages)=> {
-        const updatedMessages = [...prevMessages]
-        updatedMessages[updatedMessages.length - 1].ans = response      
-        return updatedMessages
-      })
-    })()
-
+    }else{
+      if(toolMode && toolName === "draw"){
+        genImage(question)
+        setImage(null)
+        setShowGenImage(true)
+      }
+    }
   }
 
   return (
@@ -345,6 +410,42 @@ export default function Home() {
           <Recents 
             setShowRecents={setShowRecents}
           /> 
+        }
+        {
+          showGenImage &&
+          <div className='genImageContainer' >
+            <div className="genImageWrapper" ref={genImageWrapper}>
+              <div className="genImageHeader">
+                <h2>Generate image</h2>
+                <div className="btn-container">
+                  {
+                    image && <div className="download-btn btn" onClick={downloadImage}>
+                    <span className="material-symbols-outlined">download</span>
+                  </div>
+                  }
+                  
+                  <div className="close-btn btn" onClick={() =>{
+                    genImageWrapper.current.classList.add("hide")
+                    setTimeout(()=>{
+                      setShowGenImage(false)
+                    }, 300)
+                    }} >
+                      <span className="material-symbols-outlined">close</span>
+                  </div>
+                </div>
+              </div>
+              <div className="genImageBody">
+                {
+                  image && <img
+                      src={`data:${image.mimeType};base64,${image.base64Data}`}
+                      alt="Generated"
+                    />
+                }
+                
+                
+              </div>
+            </div>
+          </div>
         }
 
       </div>

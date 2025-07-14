@@ -7,7 +7,7 @@ import {
 } from "vite-plugin-pwa";
 
 const manifestForPlugin = {
-  registerType: 'prompt',
+  registerType: 'autoUpdate',
   injectRegister: 'script',
   includeAssets: ['favicon.ico',
     'apple-touch-icon.png',
@@ -38,6 +38,9 @@ const manifestForPlugin = {
         type: 'image/png',
         purpose: 'maskable',
       }],
+       workbox: {
+        cleanupOutdatedCaches: true
+      },
     theme_color: '#101218',
     background_color: '#101218',
     display: "standalone",

@@ -56,30 +56,52 @@ app.post('/api/askai', async(req, res)=>{
 app.post('/api/genImage', async(req, res)=>{
   const {prompt} = req.body
   try {
+    console.log("creating...")
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash-preview-image-generation",
-      contents: contents,
+      contents: prompt,
       config: {
-        responseModalities: [Modality.IMAGE],
+        responseModalities: [Modality.TEXT, Modality.IMAGE],
       },
     });
+    
+    const parts = response.candidates?.[0]?.content?.parts;
 
-    for (const part of response.candidates[0].content.parts) {
-      if (part.text) {
-        console.log(part.text);
-      } else if (part.inlineData) {
-        const mimeype = part.inlineData.mimeType
-        const base64Data = part.inlineData.data;
-        // const buffer = Buffer.from(imageData, "base64");
-        // fs.writeFileSync("gemini-native-image.png", buffer);
-        // console.log("Image saved as gemini-native-image.png");
-
-      res.json({mimeype, base64Data})
-      }
+    if (!parts || parts.length === 0) {
+      return res.status(500).json({ error: "No content parts in response" });
     }
 
+    for (const part of parts) {
+      if (part.inlineData) {
+        return res.json({
+          mimeType: part.inlineData.mimeType,
+          base64Data: part.inlineData.data,
+        });
+      }
+    }
+    return res.status(404).json({ message: "No image found." });
+
+
+    // for (const part of response.candidates[0].content.parts) {
+    //   console.log("image generated")
+    //   if (part.text) {
+    //     console.log(part.text);
+    //   } else if (part.inlineData) {
+    //     const images = []
+    //     images.push({
+    //       mimeType: part.inlineData.mimeType, 
+    //       base64Data: part.inlineData.data
+    //     })
+    //     // const buffer = Buffer.from(imageData, "base64");
+    //     // fs.writeFileSync("gemini-native-image.png", buffer);
+    //     // console.log("Image saved as gemini-native-image.png");
+    //   res.json(images)
+    //   }
+    // }
+
   } catch (err) {
-    es.json({err})
+     console.error("Error generating image:", err);
+    return res.status(500).json({ error: err.message || "Something went wrong" });
   }
 })
 
