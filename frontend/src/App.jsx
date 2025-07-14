@@ -10,7 +10,7 @@ import {
 } from 'react'
 import Home from './activities/Home.jsx'
 import About from './activities/About.jsx'
-import Search from './activities/Search.jsx'
+// import Search from './activities/Search.jsx'
 import Apps from './activities/Apps.jsx'
 import Settings from './activities/Settings.jsx'
 import leftSideBar from './components/LeftSideBar.jsx'
@@ -42,7 +42,7 @@ function App() {
             <main>
               <Routes>
                 <Route path='/' element={<Home />} isActive={ location.pathname === '/' ? true: false } />
-                <Route path='/chat/:chatId?' element={<Search />} />
+                {/* <Route path='/chat/:chatId?' element={<Search />} /> */}
                 <Route path='/apps' element={<Apps />} />
                 <Route path='/settings' element={<Settings />} />
                 <Route path='/login' element={<Login />} />
@@ -55,7 +55,7 @@ function App() {
             <main>
               <Routes>
                   <Route path='/' element={<Home />} isActive={ location.pathname === '/' ? true: false } />
-                  <Route path='/chat/:chatId?' element={<Search />} />
+                  {/* <Route path='/chat/:chatId?' element={<Search />} /> */}
                   <Route path='/apps' element={<Apps />} />
                   <Route path='/settings' element={<Settings />} />
                 </Routes>

@@ -1,12 +1,12 @@
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
 const dotenv = require('dotenv')
 const express = require('express')
-// const cors = require('cors')
+const cors = require('cors')
 const app = express()
 dotenv.config()
-// app.use(cors({
-//   origin: [ "https://queai.vercel.app" , "http://localhost:5173" ]
-// }))
+app.use(cors({
+  origin: [ "https://queai.vercel.app" , "http://localhost:5173" ]
+}))
 app.use(express.json())
 const port = process.env.PORT
 const genAI = new GoogleGenerativeAI(process.env.AI_API_KEY);

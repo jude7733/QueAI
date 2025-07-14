@@ -191,10 +191,10 @@ export default function Search(props) {
 
   }, [showLangDialog, showTypeDialog, ifCancel])
 
-  useEffect(()=> {
-    const inputBox = inputBoxRef.current
-    inputBox.focus()
-  },[])
+  // useEffect(()=> {
+  //   const inputBox = inputBoxRef.current
+  //   inputBox.focus()
+  // },[])
 
   useEffect(()=> {
     if (messages[0]) {
