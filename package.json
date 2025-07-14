@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@google/genai": "^1.9.0",
+    "fs": "^0.0.1-security",
+    "node-fs": "^0.1.7"
+  }
+}

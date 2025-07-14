@@ -43,6 +43,7 @@ export default function Home() {
   const leftSidebarRef = useRef(null)
   const rightSidebarRef = useRef(null)
   const introTxt = useRef(null)
+  const  searchContainerRef = useRef(null)
   
 
   const lastElement = useRef(null)
@@ -173,7 +174,8 @@ export default function Home() {
       leftSidebarRef.current.classList.add("show")
       rightSidebarRef.current.classList.add("show")
       homeWrapperRef.current.style.paddingTop = "0"
-      searchBoxRef.current.classList.add('onsearch')
+      // searchBoxRef.current.classList.add('onsearch')
+      searchContainerRef.current.classList.add('onsearch')
       searchBoxRef.current.classList.remove('active')
       homeContainerRef.current.classList.add('onsearch')
       setDrawerCollapsed(true)
@@ -294,6 +296,7 @@ export default function Home() {
                 toolMode={toolMode}
                 toolName={toolName}
                 setToolMode={setToolMode}
+                searchContainerRef={searchContainerRef}
               />              
               <SearchTools
                 ref={toolsRef}

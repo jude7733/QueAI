@@ -30,7 +30,8 @@ const SearchBox = forwardRef(({
   onLang,
   toolMode,
   toolName, 
-  setToolMode
+  setToolMode,
+  searchContainerRef
 }, ref) => {
   const navigate = useNavigate()
   const [rows,
@@ -246,74 +247,78 @@ const SearchBox = forwardRef(({
         </Dialog>
     }
     
-    
-    <div className={`searchBox ${toolMode && "toolmode"} ${toolMode && (toolName == "draw" && "red" || toolName == "code" && "green" || toolName == "summarise" && "blue" || toolName == "story" && "purple" || toolName == "learn" && "yellow" )} ${animactive && "active"}`} ref={ref} onClick={()=> window.innerWidth > 768 && inputRef.current.focus()}>
-      <div className='searchBoxInputContainer'>
-        {
-          toolMode &&
-          <div className="searchTool">
-            <span className={`${toolName} material-symbols-outlined`}>{toolName == "draw" && "draw" || toolName == "code" && "code" || toolName == "summarise" && "assignment" || toolName == "story" && "ink_pen" || toolName == "learn" && "book_2" }</span>
-            <p>{toolName}</p>
-            <div className="close-btn" onClick={()=> setToolMode(false)}>
-              <span className="material-symbols-outlined">close</span>
-            </div>
-        </div>
-        }
-        
-        <textarea
-          type="text"
-          rows="1"
-          placeholder={placeHolder}
-          id="promptText"
-          ref={inputRef}
-          onFocus={()=> {
-            if(!toolMode) setAnimactive(false)  
-          }}
-          onChange={handleInputChange}
-          value={value}
-          onKeyDown={e => {
-            if (e.key === "Enter" && !e.ctrlKey) {
-              e.preventDefault();
-              !answering && onKeyDown();
-            }
-            if (e.key === "Enter" && e.ctrlKey) {
-              // Action for Ct
-            }
-          }}
-          />
-      </div>
-      <div className='searchBoxButtonContainer'>
-        {
-          !animactive &&
 
-          <div className='chipContainer'>
-            <SelectionChip
-                onClick={()=> {
-                  showDialog('type')
-                  setShowDialogBox(true)
-                }} 
-                icon={'bolt'}
-                body={searchMode} />
-            <SelectionChip
-                onClick={()=> {
-                  showDialog('lang')
-                  setShowDialogBox(true)
-                }}
-                icon={'language'}
-                body={searchLang} />
-            <span className='blank' />
+    <div className="searchBoxContainer" ref={searchContainerRef}>
+      <div className={`searchBox ${toolMode && "toolmode"} ${toolMode && (toolName == "draw" && "red" || toolName == "code" && "green" || toolName == "summarise" && "blue" || toolName == "story" && "purple" || toolName == "learn" && "yellow" )} ${animactive && "active"}`} ref={ref} onClick={()=> window.innerWidth > 768 && inputRef.current.focus()}>
+        <div className='searchBoxInputContainer'>
+          {
+            toolMode &&
+            <div className="searchTool">
+              <span className={`${toolName} material-symbols-outlined`}>{toolName == "draw" && "draw" || toolName == "code" && "code" || toolName == "summarise" && "assignment" || toolName == "story" && "ink_pen" || toolName == "learn" && "book_2" }</span>
+              <p>{toolName}</p>
+              <div className="close-btn" onClick={()=> setToolMode(false)}>
+                <span className="material-symbols-outlined">close</span>
+              </div>
           </div>
-        }
-        
-        <SmallBtn
-          className={"sendBtn"}
-          state={btnState && !answering ? "active": "inactive"}
-          bgcolor={`${toolMode && toolName }`}
-          icon={"arrow_upward"}
-          onClick={handleButtonClick}
-          />
+          }
+          
+          <textarea
+            type="text"
+            rows="1"
+            placeholder={placeHolder}
+            id="promptText"
+            ref={inputRef}
+            onFocus={()=> {
+              if(!toolMode) setAnimactive(false)  
+            }}
+            onChange={handleInputChange}
+            value={value}
+            onKeyDown={e => {
+              if (e.key === "Enter" && !e.ctrlKey) {
+                e.preventDefault();
+                !answering && onKeyDown();
+              }
+              if (e.key === "Enter" && e.ctrlKey) {
+                // Action for Ct
+              }
+            }}
+            />
+        </div>
+        <div className='searchBoxButtonContainer'>
+          {
+            !animactive &&
+
+            <div className='chipContainer'>
+              <SelectionChip
+                  onClick={()=> {
+                    showDialog('type')
+                    setShowDialogBox(true)
+                  }} 
+                  icon={'bolt'}
+                  body={searchMode} />
+              <SelectionChip
+                  onClick={()=> {
+                    showDialog('lang')
+                    setShowDialogBox(true)
+                  }}
+                  icon={'language'}
+                  body={searchLang} />
+              <span className='blank' />
+            </div>
+          }
+          
+          <SmallBtn
+            className={"sendBtn"}
+            state={btnState && !answering ? "active": "inactive"}
+            bgcolor={`${toolMode && toolName }`}
+            icon={"arrow_upward"}
+            onClick={handleButtonClick}
+            />
+        </div>
       </div>
+
     </div>
+    
     </>
   )
 })
