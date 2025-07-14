@@ -98,6 +98,12 @@ const settingsWrapper = useRef(null)
                                     <div className="switch-btn"></div>
                                 </div>
                             </div>
+                            <div className="settings-item">
+                                <p className="item-name">Custom animation colour</p>
+                                <div className={`switch ${animations && "active"}`} onClick={() => setAnimState(!animState)} >
+                                    <div className="switch-btn"></div>
+                                </div>
+                            </div>
                         </div>
                     }
 

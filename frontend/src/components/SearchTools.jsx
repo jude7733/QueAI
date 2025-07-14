@@ -6,7 +6,8 @@ const SearchTools = forwardRef(({
     setBtnState,
     setToolMode,
     setToolName,
-    setAnimactive
+    setAnimactive, 
+    animState
 }, ref)=>{
     return (
         <div ref={ref} className="toolsContainer">
@@ -16,7 +17,7 @@ const SearchTools = forwardRef(({
                 setTimeout(() => {
                     inputRef.current.focus()
                 }, 100);
-                setAnimactive(true)
+                animState && setAnimactive(true)
             }}>
                 <span className='material-symbols-outlined'>draw</span>
                 <p>Create an image</p>
@@ -31,7 +32,7 @@ const SearchTools = forwardRef(({
                 // setBtnState(true)
                 setToolMode(true)
                 setToolName("code")
-                setAnimactive(true)
+                animState && setAnimactive(true)
                 }}>
                 <span className='material-symbols-outlined'>code</span>
                 <p>Write a code</p>
@@ -46,7 +47,7 @@ const SearchTools = forwardRef(({
                 // setBtnState(true)
                 setToolMode(true)
                 setToolName("summarise")
-                setAnimactive(true)
+                animState && setAnimactive(true)
             }}>
                 <span className='material-symbols-outlined'>assignment</span>
                 <p>Summarise text</p>
@@ -61,7 +62,7 @@ const SearchTools = forwardRef(({
                 // setBtnState(true)
                 setToolMode(true)
                 setToolName("story")
-                setAnimactive(true)
+                animState && setAnimactive(true)
             }} >
                 <span className='material-symbols-outlined'>ink_pen</span>
                 <p>Write a story</p>
@@ -76,7 +77,7 @@ const SearchTools = forwardRef(({
                 // setBtnState(true)
                 setToolMode(true)
                 setToolName("learn")
-                setAnimactive(true)
+                animState && setAnimactive(true)
             }} >
                 <span className='material-symbols-outlined'>book_2</span>
                 <p>Learn a topic</p>

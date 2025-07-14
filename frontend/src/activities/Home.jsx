@@ -342,6 +342,7 @@ export default function Home() {
                 setChats={setChats}
                 getRandomString={getRandomString}
                 chats={chats}
+                searchContainerRef={searchContainerRef}
               />
               <SearchBox
                 ref={searchBoxRef}
@@ -362,7 +363,7 @@ export default function Home() {
                 toolName={toolName}
                 setToolMode={setToolMode}
                 searchContainerRef={searchContainerRef}
-              />              
+              />  
               <SearchTools
                 ref={toolsRef}
                 setQuestion={setQuestion}
@@ -371,6 +372,7 @@ export default function Home() {
                 setToolMode={setToolMode}
                 setToolName={setToolName}
                 setAnimactive={setAnimactive}
+                animState={animState}
               />
             </div>
 

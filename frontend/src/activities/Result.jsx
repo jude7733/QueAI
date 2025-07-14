@@ -17,7 +17,8 @@ const Result = forwardRef(({
     setChatID,
     setChats,
     getRandomString,
-    chats
+    chats,
+    searchContainerRef
 }, ref)=>{
 
   useEffect(()=>{
@@ -50,7 +51,7 @@ const Result = forwardRef(({
                         leftSidebarRef.current.classList.remove("show")
                         rightSidebarRef.current.classList.remove("show")
                         homeContainerRef.current.style.paddingTop = "150px"
-                        searchBoxRef.current.classList.remove('onsearch')
+                        searchContainerRef.current.classList.remove('onsearch')
                         searchBoxRef.current.classList.add('active')
                         homeContainerRef.current.classList.remove('onsearch')
                         setSearched(false)
