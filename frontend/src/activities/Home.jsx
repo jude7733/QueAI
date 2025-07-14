@@ -42,6 +42,7 @@ export default function Home() {
   const resultTitle = useRef(null)
   const leftSidebarRef = useRef(null)
   const rightSidebarRef = useRef(null)
+  const introTxt = useRef(null)
   
 
   const lastElement = useRef(null)
@@ -74,6 +75,7 @@ export default function Home() {
   const [isLoggedIn, setLoginState] = useState(false)
   const [toolMode, setToolMode] = useState(false)
   const [toolName, setToolName] = useState("")
+  const [welcomeMsgHead, setWelcomeMsgTxt] = useState("Meet Que AI")
 
   const [chats, setChats] = useState({})
   const [chatNames, setChatNames] = useState({})
@@ -133,7 +135,31 @@ export default function Home() {
     setQuestion(e.target.value)
   }
 
-  
+  // useEffect(()=>{
+  //   if(toolName !== ""){
+  //     if (introTxt.current) {
+  //     introTxt.current.classList.remove("change");
+  //     setTimeout(() => {
+  //      introTxt.current.classList.add("change");
+  //      setTimeout(() => {
+  //       setWelcomeMsgTxt(
+  //       `${
+  //         toolName ==="draw" && "Describe your image" ||
+  //         toolName ==="code" && "Describe your image"
+  //       }`
+  //      )
+  //      }, 500);
+  //     },);
+  //   }
+  //   }
+
+  //   return () => {
+  //     introTxt.current.classList.add("change");
+  //      setTimeout(() => {
+  //       setWelcomeMsgTxt("Meet Que AI")
+  //      }, 500);
+  //   }
+  // }, [toolName])
 
 
   const handleButtonClick = () => {
@@ -224,11 +250,11 @@ export default function Home() {
                 drawerCollapsed={drawerCollapsed}
                 setDrawerCollapsed={setDrawerCollapsed}
                 leftSidebarRef={leftSidebarRef}
-                isLoggedIn={false}
+                isLoggedIn={isLoggedIn}
                 setShowRecents={setShowRecents}
               />
               <div ref={introRef} className="intro">
-                <h1>Meet Que AI</h1>
+                <h1 ref={introTxt} className='introTxt' >{welcomeMsgHead}</h1>
                 <p>Your personal AI, ready to help you think better and move faster.</p>
               </div>
               <Result 
@@ -308,6 +334,7 @@ export default function Home() {
             setShowSettings={setShowSettings} 
             setAnimState={setAnimState} 
             animState={animState}
+            Logo={Logo}
           />
         }
         {

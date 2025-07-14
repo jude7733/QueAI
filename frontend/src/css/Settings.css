@@ -1,5 +1,177 @@
-.settings{
-  height: 100%;
+.settings-body{
+  display: flex;
+  flex-direction: row;
+}
+
+.settingsMenuContainer{
+  flex: 1;
+  border-right: 1px solid #333232;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.settings-menu-item{
   width: 100%;
-  padding: 0 15px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.settings-menu-item span{
+  font-size: 1.2em;
+}
+.settings-menu-item.active, .settings-menu-item:hover{
+  background-color: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
+}
+.settingsContentContainer{
+  flex: 3;
+}
+
+.settings-body .general{
+  padding: 10px 15px  ;
+}
+
+
+.settings-body .general .accountContainer{
+  padding: 10px;
+  margin-top: 20px;
+  display: flex;
+  background-color: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.settings-body .general .accountContainer .profileContainer{
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-body .general .accountContainer .profileContainer span{
+  font-size: 3em;
+}
+
+.settings-body .general .accountContainer .infoContainer{
+  flex: 1;
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.settings-body .general .accountContainer .buttonContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.settings-body .animations, .general{
+  width: 100%;
+  height: 100%;
+}
+
+
+@keyframes slidein {
+  from{
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to{
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideout {
+  from{
+    transform: translateX(0);
+    opacity: 0;
+  }
+  to{
+    transform: translateX(100%);
+    opacity: 1;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .settingsMenuContainer.hide{
+    display: none;
+  }
+  .settingsContentContainer.showContent{
+    display: flex;
+    animation: slidein 0.3s;
+  }
+  .settingsContentContainer.hideContent{
+    animation: slidein 0.3s;
+    display: none;
+  }
+  .settings-menu-item.active{
+    background-color: transparent;
+    backdrop-filter: none;
+  }
+  .settings-back{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .settings-back span{
+    margin-top: 5px;
+  }
+  .settings-back h2{
+    text-transform: capitalize;
+  }
+}
+
+.about{
+  width: 100%;
+  height: 100%;
+}
+
+.about-logo{
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: end;
+}
+
+.about-logo div:first-child{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+}
+
+.about-logo div:last-child{
+  padding-bottom: 7px;
+  font-size: 18px;
+}
+
+.about-logo img{
+  height: 50px;
+  width: 50px;
+  margin-top: 5px;
+}
+
+.about-logo h1{
+  font-size: 2.5em;
+  font-family: GeneralSans-Medium;
+}
+
+.about-author{
+  margin-top: 20px;
+  text-align: center;
 }

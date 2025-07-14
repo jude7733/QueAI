@@ -308,6 +308,7 @@ const SearchBox = forwardRef(({
         <SmallBtn
           className={"sendBtn"}
           state={btnState && !answering ? "active": "inactive"}
+          bgcolor={`${toolMode && toolName }`}
           icon={"arrow_upward"}
           onClick={handleButtonClick}
           />

@@ -27,3 +27,27 @@
   background-color: var(--button-active);
   pointer-events: auto;
 }
+
+
+.smallBtn.active.draw{
+  background-color: rgb(255, 0, 0);
+}
+
+.smallBtn.active.summarise{
+  background-color: rgb(19, 57, 182);
+}
+
+
+.smallBtn.active.code{
+  background-color: rgb(14, 112, 23);
+}
+
+
+.smallBtn.active.story{
+  background-color: rgb(55, 11, 136);
+}
+
+
+.smallBtn.active.learn{
+  background-color: rgb(138, 87, 11);
+}

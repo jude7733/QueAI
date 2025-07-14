@@ -47,7 +47,7 @@ const LeftSideBar = forwardRef(({
         <div className="sidebar-collapse-btn btn"  onClick={()=> {
           window.innerWidth > 768 ?
           setDrawerCollapsed(!drawerCollapsed)
-          : leftSidebarRef.current.classList.add("closed")
+          : ref.current.classList.add("closed")
           }} >
           <span className="material-symbols-outlined">{drawerCollapsed ? "left_panel_open" : "left_panel_close"}</span>
         </div>
