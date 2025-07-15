@@ -534,7 +534,7 @@
   display: flex;
 }
 
-.settingsContainer, .recentsContainer, .genImageContainer{
+.settingsContainer, .recentsContainer, .genImageContainer, .loginContainer{
   position: fixed;
   width: 100%;
   height: 100%;
@@ -570,7 +570,7 @@
 
 
 
-.settings-wrapper, .recents-wrapper, .genImageWrapper{
+.settings-wrapper, .recents-wrapper, .genImageWrapper, .loginWrapper{
   width: 800px;
   max-width: 100%;
   height: 500px;
@@ -585,7 +585,7 @@
   overflow: scroll;
 }
 
-.settings-wrapper.hide, .recents-wrapper.hide, .genImageWrapper.hide{
+.settings-wrapper.hide, .recents-wrapper.hide, .genImageWrapper.hide, .loginWrapper.hide{
   animation: hides 0.3s ease-in-out;
 }
 
@@ -597,13 +597,17 @@
   }
 }
 
-.settings-header, .recents-header, .genImageHeader{
+.settings-header, .recents-header, .genImageHeader, .loginHeader{
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px 25px;
   border-bottom: 1px solid #333232;
+}
+
+.loginHeader{
+  border-bottom: none;
 }
 
 .btn-container{
@@ -677,39 +681,6 @@
   padding: 0;
 }
 
-.login-btns-container{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.login-btn{
-  padding:10px 15px ;
-  background-color: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(20px);
-  border-radius: 30px;
-  cursor: pointer;
-  font-weight: 700;
-}
-
-.login-btn:hover{
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.signup-btn{
-  padding:10px 15px ;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(20px);
-  border-radius: 30px;
-  cursor: pointer;
-  font-weight: 700;
-}
-
-.signup-btn:hover{
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-
 
 .markdown-output h1 {
   font-size: 2rem;
@@ -759,4 +730,30 @@
   object-fit: contain;
   border-radius: 10px;
   overflow: hidden;
+}
+
+
+.loginBody{
+  padding: 10px;
+}
+
+.googlLoginBox{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  gap: 15px;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10);
+  padding: 15px 25px;
+  border-radius: 30px;
+}
+
+.googlLoginBox p{
+  font-size: 18px;
+  font-family: GeneralSans-Medium;
+}
+
+.googlLoginBox:hover{
+  background-color: rgba(255, 255, 255, 0.1);
 }

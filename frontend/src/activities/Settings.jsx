@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react'
+import {signOut} from "firebase/auth";
 import '../css/Settings.css'
 
-function Settings({animations, setShowSettings, setAnimState, animState, Logo}) {
+function Settings({animations, setShowSettings, setAnimState, animState, Logo, isLoggedIn, user, setShowLoginDialog, auth, setUser, setLoginState}) {
 
 const [selectedSettingsItem, setSelectedSettingsItem] = useState("general")
 
@@ -75,15 +76,46 @@ const settingsWrapper = useRef(null)
 
                             <div className="accountContainer">
                                 <div className="profileContainer">
-                                    <span className="material-symbols-outlined">account_circle</span>
+                                    {
+                                        isLoggedIn && user ? (
+                                            <img src={user.photoURL} style={{
+                                                height: "40px",
+                                                width: "40px",
+                                                borderRadius: "50%"
+                                            }}/>
+                                        ) : (
+                                            <span className="material-symbols-outlined">account_circle</span>
+                                        )
+                                    }
+                                    
                                 </div>
                                 <div className="infoContainer">
-                                    <h4>Sign-in into Que AI</h4>
-                                    <p>Login to save your chats</p>
+                                    <h4>
+                                        {
+                                            isLoggedIn && user ? user.displayName : "Sign-in into Que AI"
+                                        }
+                                    </h4>
+                                    <p>
+                                        {
+                                            isLoggedIn && user ? user.email : "Sign in to save your chats"
+                                        }
+                                    </p>
                                 </div>
-                                <div className="buttonContainer">
+                                <div className="buttonContainer" onClick={()=>{
+                                    if(isLoggedIn && user){
+                                        (async ()=>{
+                                            await signOut(auth)
+                                            setUser(null)
+                                            setLoginState(false)
+                                        })()
+                                    }else{
+                                        setShowLoginDialog(true)
+                                    }
+                                }}>
                                     <div className="login-btn">
-                                    Sign in
+                                    {
+                                        isLoggedIn ? "Sign out" : "Sign in"
+                                    }
                                     </div>
                                 </div>
                             </div>

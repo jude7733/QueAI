@@ -3,6 +3,8 @@ import {
   useRef,
   useEffect
 } from 'react'
+import { signInWithPopup, GoogleAuthProvider , onAuthStateChanged} from "firebase/auth";
+import {auth} from '../firebase.js'
 import {
   useNavigate
 } from 'react-router'
@@ -16,6 +18,7 @@ import '../css/Home.css'
 import SearchBox from '../components/SearchBox.jsx'
 import Header from '../components/Header.jsx';
 import profilePic from '../assets/myPic.png'
+import GLogo from '../assets/google-logo.png'
 import LeftSideBar from '../components/LeftSideBar.jsx';
 import RightSideBar from '../components/RightSideBar.jsx';
 import Settings from './Settings.jsx';
@@ -46,6 +49,7 @@ export default function Home() {
   const  searchContainerRef = useRef(null)
 
   const genImageWrapper = useRef(null)
+  const loginWrapper = useRef(null)
   
 
   const lastElement = useRef(null)
@@ -60,6 +64,7 @@ export default function Home() {
   const [showSettings, setShowSettings] = useState(false)
   const [showRecents, setShowRecents] = useState(false)
   const [showGenImage, setShowGenImage] = useState(false)
+  const [showLoginDialog, setShowLoginDialog] = useState(false)
   const [drawerCollapsed, setDrawerCollapsed] = useState(true)
 
   const [animState, setAnimState] = useState(true)
@@ -86,8 +91,23 @@ export default function Home() {
   const [chats, setChats] = useState({})
   const [chatNames, setChatNames] = useState({})
 
+  const [user, setUser] = useState(null)
 
 
+  useEffect(()=>{
+    const unsubscribe = onAuthStateChanged(auth, (user)=>{
+      if(user){
+        setLoginState(true)
+        setUser(user)
+        loginWrapper.current.classList.add("hide")
+        setTimeout(()=>{
+          setShowLoginDialog(false)
+        }, 300)
+      }
+    })
+
+    return () => unsubscribe()
+  }, [])
 
   useEffect(() => {
     setAnimactive(animState)
@@ -319,6 +339,8 @@ export default function Home() {
                 leftSidebarRef={leftSidebarRef}
                 isLoggedIn={isLoggedIn}
                 setShowRecents={setShowRecents}
+                setShowLoginDialog={setShowLoginDialog}
+                user={user}
               />
               <div ref={introRef} className="intro">
                 <h1 ref={introTxt} className='introTxt' >{welcomeMsgHead}</h1>
@@ -405,6 +427,12 @@ export default function Home() {
             setAnimState={setAnimState} 
             animState={animState}
             Logo={Logo}
+            user={user}
+            isLoggedIn={isLoggedIn}
+            setShowLoginDialog={setShowLoginDialog}
+            auth={auth}
+            setUser={setUser}
+            setLoginState={setLoginState}
           />
         }
         {
@@ -445,6 +473,69 @@ export default function Home() {
                 }
                 
                 
+              </div>
+            </div>
+          </div>
+        }
+
+        {
+          showLoginDialog && 
+          <div className="loginContainer">
+            <div className="loginWrapper" ref={loginWrapper}>
+              <div className="loginHeader">
+                <h2> </h2>
+                <div className="btn-container">                  
+                  <div className="close-btn btn" onClick={() =>{
+                    loginWrapper.current.classList.add("hide")
+                    setTimeout(()=>{
+                      setShowLoginDialog(false)
+                    }, 300)
+                    }} >
+                      <span className="material-symbols-outlined">close</span>
+                  </div>
+                </div>
+              </div>
+              <div className="loginBody">
+                <h1 style={{
+                  textAlign: "center", 
+                  fontSize: "2.4em", 
+                  fontFamily: "GeneralSans-SemiBold",
+                  fontWeight: "100"
+                }}>Sign in into Que AI</h1>
+                <p style={{
+                  textAlign: "center", 
+                  marginTop: "15px", 
+                  fontSize: "18px",
+                  fontFamily: "GeneralSans-Medium",
+                  opacity: "0.8"
+                }}>Sign in to save your chats, sync settings, and more.</p>
+
+                <div className="loginBox" style={{
+                  height: "200px",
+                  display: "flex", 
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}>
+                  <div className="googlLoginBox" onClick={async () =>{
+                    const provider = new GoogleAuthProvider()
+
+                    try{
+                      const result = await signInWithPopup(auth, provider)
+
+                      console.log("signed in successful", result.user)
+
+                      setLoginState(true)
+                    } catch (err){
+                      console.log("error signin:", err)
+                    }
+                  }}>
+                    <img src={GLogo} alt="" style={{
+                      width: "20px", 
+                      height: "20px"
+                    }} />
+                    <p>Continue with Google</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

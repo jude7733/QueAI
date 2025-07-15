@@ -2,6 +2,7 @@ import {useState, useEffect, forwardRef} from 'react'
 import {useLocation, useNavigate} from 'react-router'
 import '../css/Header.css'
 import Logo from '../assets/logosmall.png'
+import Avatar from '../../public/avatar.png'
 import SmallBtn from './SmallBtn.jsx'
 import profilePic from '../assets/myPic.png'
 
@@ -12,6 +13,8 @@ const Header = forwardRef(({
   leftSidebarRef,
   isLoggedIn,
   setShowRecents,
+  setShowLoginDialog, 
+  user
 }, ref)=>{
   const navigate = useNavigate()
   const [route,
@@ -37,13 +40,10 @@ const Header = forwardRef(({
       <div className="secondCol">
         {
           !isLoggedIn ?
-          <div className='login-btns-container'>
-            <div className="login-btn">
-              Login
-            </div>
-            <div className="signup-btn">
-              {window.innerWidth > 768 ? "Sign up for free" : "Sign up"}
-            </div>
+          <div className='login-btn' onClick={() => setShowLoginDialog(true)}>
+            {/* <img src={Avatar} alt="" /> */}
+            <span className="material-symbols-outlined">account_circle</span>
+            <p>Sign in</p>
           </div>
           :
           <>
@@ -51,7 +51,7 @@ const Header = forwardRef(({
               <span className="material-symbols-outlined">history</span>
             </div>
             <div className="profile-container">
-              <img src={profilePic} alt="" />
+              <img src={user.photoURL} alt="profile" />
             </div>
           </>
           
