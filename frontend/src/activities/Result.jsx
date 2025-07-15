@@ -96,11 +96,8 @@ const Result = forwardRef(({
                                     </div>
                                 </div>
                                 <div className="quickActions">
-                                    <div className="actionBtn action-like">
-                                        <span className="material-symbols-outlined">thumb_up</span>
-                                    </div>
-                                    <div className="actionBtn action-dislike">
-                                        <span className="material-symbols-outlined">thumb_down</span>
+                                    <div className="actionBtn action-favorite">
+                                        <span className="material-symbols-outlined">favorite</span>
                                     </div>
                                     <div className="actionBtn action-copy">
                                         <span className="material-symbols-outlined">content_copy</span>

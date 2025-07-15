@@ -119,7 +119,7 @@ const settingsWrapper = useRef(null)
                             </div>
                             <div className="about-author">
                                 <div className="dvlpr">
-                                    <p>Designed & Developed by <a href='https://github.com/SafwanKS' onClick={(e)=> {
+                                    <p>An  open - source AI chatbot application designed & developed by <a href='https://github.com/SafwanKS' onClick={(e)=> {
                                     e.preventDefault()
                                     window.open("https://github.com/SafwanKS")
                                     }}>Safwan KS</a></p>
