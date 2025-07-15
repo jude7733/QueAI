@@ -2,7 +2,7 @@ import {useState, useEffect, forwardRef} from 'react'
 import {useLocation, useNavigate} from 'react-router'
 import '../css/Header.css'
 import Logo from '../assets/logosmall.png'
-import Avatar from '../../public/avatar.png'
+import Avatar from '../assets/avatar.png'
 import SmallBtn from './SmallBtn.jsx'
 
 const Header = forwardRef(({
