@@ -4,7 +4,6 @@ import '../css/Header.css'
 import Logo from '../assets/logosmall.png'
 import Avatar from '../../public/avatar.png'
 import SmallBtn from './SmallBtn.jsx'
-import profilePic from '../assets/myPic.png'
 
 const Header = forwardRef(({
   headerRef,

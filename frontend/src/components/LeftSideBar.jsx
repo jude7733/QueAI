@@ -2,7 +2,6 @@ import React , {forwardRef} from 'react'
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router'
 import '../css/Sidebar.css'
-import profilePic from '../assets/myPic.png';
 import Logo from '../assets/logosmall.png';
 
 const LeftSideBar = forwardRef(({

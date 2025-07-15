@@ -17,7 +17,6 @@ import Gemini from "../assets/gemini.png"
 import '../css/Home.css'
 import SearchBox from '../components/SearchBox.jsx'
 import Header from '../components/Header.jsx';
-import profilePic from '../assets/myPic.png'
 import GLogo from '../assets/google-logo.png'
 import LeftSideBar from '../components/LeftSideBar.jsx';
 import RightSideBar from '../components/RightSideBar.jsx';
