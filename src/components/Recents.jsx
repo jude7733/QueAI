@@ -1,6 +1,6 @@
 import React, {useRef} from 'react'
 
-function Recents({setShowRecents}) {
+function Recents({setShowRecents, setShowDialog}) {
 
   const recentsWrapper = useRef(null)
 
@@ -13,7 +13,8 @@ function Recents({setShowRecents}) {
               recentsWrapper.current.classList.add("hide")
               setTimeout(()=>{
                 setShowRecents(false)
-              }, 300)
+
+              }, 200)
               }} >
                 <span className="material-symbols-outlined">close</span>
             </div>

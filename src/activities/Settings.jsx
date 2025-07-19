@@ -31,7 +31,7 @@ const settingsWrapper = useRef(null)
                         settingsWrapper.current.classList.add("hide")
                         setTimeout(() => {
                             setShowSettings(false) 
-                        }, 300);
+                        }, 200);
                         
                     }} >
                     <span className="material-symbols-outlined">close</span>

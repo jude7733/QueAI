@@ -1,5 +1,8 @@
 import React, {useEffect, useState, forwardRef} from "react";
 import ReactMarkdown from 'react-markdown';
+
+import '../css/LoadingBar.css'
+
 const Result = forwardRef(({
     introRef,
     toolsRef,
@@ -18,8 +21,15 @@ const Result = forwardRef(({
     setChats,
     getRandomString,
     chats,
-    searchContainerRef
+    searchContainerRef,
+    setShowToast,
+    setToastText,
+    toastRef,
+    generativeModel, 
+    setGenerativeModel
 }, ref)=>{
+
+    const [showModelSelect, setShowModeSelect] = useState(false)
 
   useEffect(()=>{
     if(messages[0]){
@@ -38,6 +48,50 @@ const Result = forwardRef(({
       }
     }
   }, [messages])
+
+  const handleSave = (title, text) =>{
+    const blob = new Blob([text], {type : "text/plain"})
+
+    const url = URL.createObjectURL(blob)
+
+    const a = document.createElement('a')
+    a.href =url;
+
+    a.download =  title + ".txt"
+    a.click()
+
+    URL.revokeObjectURL(url)
+  }
+
+  const handleShare = async (title, text) =>{
+    if(navigator.share){
+        try{
+            await navigator.share({
+                title: title,
+                text: text
+            })
+            console.log("shared success")
+        } catch (err){
+            console.log("error while sharing " + err)
+        }
+    } else{
+        alert("Sharing is not available on your browser/device")
+    }
+  }
+
+  const copyText = async (text) =>{
+    try{
+        await navigator.clipboard.writeText(text)
+        setShowToast(true)
+        setToastText("Copied to clipboard")
+        setTimeout(() => {
+            if(toastRef && toastRef.current) toastRef.current.classList.add("hide")
+            setShowToast(false)
+        }, 2000);
+    }catch(err){
+        console.log(err)
+    }
+  }
 
     return (
         <div ref={ref} className="result">
@@ -61,9 +115,32 @@ const Result = forwardRef(({
                     <h1 ref={resultTitle} ></h1>
                 </div>
                 <div className="result-header-right">
-                <div className="more_btn">
-                    <span className="material-symbols-outlined">more_horiz</span>
-                </div>
+
+                    <div className="modelSelect">
+                        <div className="model-select-btn" onClick={()=> setShowModeSelect(!showModelSelect)} style={{
+                            background: showModelSelect && "var(--dialog-bg)"
+                        }}>
+                            <p>Model: {generativeModel}</p>
+                            <span className="material-symbols-outlined">arrow_drop_down</span>
+                        </div>
+                        {
+                            showModelSelect &&
+                            <div className="model-select-list">
+                                <div className="model-select-item" onClick={()=>{
+                                    setShowModeSelect(false)
+                                    setGenerativeModel("2.0 Flash")
+                                }}>Gemini 2.0-Flash</div>
+                                <div className="model-select-item" onClick={()=>{
+                                    setShowModeSelect(false)
+                                    setGenerativeModel("2.5 Flash")
+                                }}>Gemini 2.5-Flash</div>
+                            </div>
+                        }
+                    </div>
+
+                    <div className="more_btn">
+                        <span className="material-symbols-outlined">more_horiz</span>
+                    </div>
                 </div>
             </div>
 
@@ -86,11 +163,11 @@ const Result = forwardRef(({
                             </div>
                             <div className="actions">
                                 <div className="bigActions">
-                                    <div className="actionBtn action-share">
+                                    <div className="actionBtn action-share" onClick={() => handleShare(message.que, message.ans)}>
                                     <span className="material-symbols-outlined">ios_share</span>
                                     <p>Share</p>
                                     </div>
-                                    <div className="actionBtn actionExport">
+                                    <div className="actionBtn actionExport" onClick={() => handleSave(message.que, message.ans)}>
                                     <span className="material-symbols-outlined">save_alt</span>
                                     <p>Export</p>
                                     </div>
@@ -99,7 +176,7 @@ const Result = forwardRef(({
                                     <div className="actionBtn action-favorite">
                                         <span className="material-symbols-outlined">favorite</span>
                                     </div>
-                                    <div className="actionBtn action-copy">
+                                    <div className="actionBtn action-copy" onClick={()=> copyText(message.ans)}>
                                         <span className="material-symbols-outlined">content_copy</span>
                                     </div>
                                     <div className="actionBtn actionMenu">

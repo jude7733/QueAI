@@ -8,6 +8,7 @@ const RightSideBar = forwardRef(({
   onSearch,
   isLoggedIn,
   setShowSettings,
+  relatedQues,
   Logo
 }, ref) => {
 
@@ -20,18 +21,18 @@ const RightSideBar = forwardRef(({
         <div className="right-sidebar-body">
             <div className="related-ques">
             <ul className="related-ques-list">
-                <li className="related-ques-item">
-                <p>What is the current time right now in delhi?</p>
-                <span className="material-symbols-outlined">arrow_outward</span>
-                </li>
-                <li className="related-ques-item">
-                <p>Who is the chief minister of kerala?</p>
-                <span className="material-symbols-outlined">arrow_outward</span>
-                </li>
-                <li className="related-ques-item">
-                <p>Whats</p>
-                <span className="material-symbols-outlined">arrow_outward</span>
-                </li>
+                {
+                    relatedQues !== null ?
+                        relatedQues.map((que, index) => 
+                            <li className="related-ques-item" key={index}>
+                                <p>{que}</p>
+                                <span className="material-symbols-outlined">arrow_outward</span>
+                            </li>
+                        )
+                    : 
+                        <></>
+                }
+                
             </ul>
             </div>
             <div className="right-sidebar-footer">

@@ -4,17 +4,21 @@ import {
   useEffect
 } from 'react'
 import { signInWithPopup, GoogleAuthProvider , onAuthStateChanged} from "firebase/auth";
-import {auth} from '../firebase.js'
+import { doc, setDoc } from "firebase/firestore";
+import {auth, db} from '../firebase.js'
+import {askai, askaiStream, relatedAI} from '../Gemini.js'
 import {
   useNavigate
 } from 'react-router'
 import axios from 'axios'
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 import { Link } from 'react-router'
 import ReactMarkdown from 'react-markdown';
 import Logo from '../assets/logosmall.png'
 import Gemini from "../assets/gemini.png"
 import '../css/Home.css'
+import '../css/Search.css'
 import SearchBox from '../components/SearchBox.jsx'
 import Header from '../components/Header.jsx';
 import GLogo from '../assets/google-logo.png'
@@ -22,8 +26,9 @@ import LeftSideBar from '../components/LeftSideBar.jsx';
 import RightSideBar from '../components/RightSideBar.jsx';
 import Settings from './Settings.jsx';
 import Recents from '../components/Recents.jsx';
+import Toast from '../components/Toast.jsx';
 import SearchTools from '../components/SearchTools.jsx';
-import Search from './Search.jsx';
+// import Search from './Search.jsx';
 import Result from './Result.jsx';
 
 export default function Home() {
@@ -52,6 +57,7 @@ export default function Home() {
   
 
   const lastElement = useRef(null)
+  const ToastRef = useRef(null)
 
   const navigate = useNavigate()
 
@@ -65,6 +71,11 @@ export default function Home() {
   const [showGenImage, setShowGenImage] = useState(false)
   const [showLoginDialog, setShowLoginDialog] = useState(false)
   const [drawerCollapsed, setDrawerCollapsed] = useState(true)
+  const [showDialog, setShowDialog] = useState(false)
+  const [showToast, setShowToast] = useState(false)
+  const [toastText, setToastText] = useState("")
+  const [relatedQues, setRelatedQues] = useState([])
+  const [generativeModel, setGenerativeModel] = useState("2.0 Flash")
 
   const [animState, setAnimState] = useState(true)
 
@@ -98,10 +109,12 @@ export default function Home() {
       if(user){
         setLoginState(true)
         setUser(user)
-        loginWrapper.current.classList.add("hide")
+        if (loginWrapper.current) loginWrapper.current.classList.add("hide")
         setTimeout(()=>{
           setShowLoginDialog(false)
-        }, 300)
+        }, 200)
+
+        
       }
     })
 
@@ -123,24 +136,45 @@ export default function Home() {
     return result
   }
 
-  const apiEndpoint = "https://queai-backend.vercel.app/api/askai"
   const genApiEndpoint = "https://queai-backend.vercel.app/api/genImage"
-  // const genApiEndpoint = "http://localhost:9001/api/genImage"
-  // const apiEndpoint = "http://localhost:9001/api/askai"
+
+  const extractJsonFromText = (text) => {
+    const match = text.match(/{[^]*}/); // grabs the first { ... } block
+    if (!match) return null;
+    try {
+      return JSON.parse(match[0]);
+    } catch (err) {
+      console.error("Still broken JSON:", err);
+      return null;
+    }
+  }
+
 
 
   const getResult = async (history, prompt, lang, resType) => {
     try {
-      const response = await axios.post(apiEndpoint, {
-        history: history,
-        prompt: prompt,
-        lang: lang,
-        type: resType
-      })
-      return response.data.responseText
+      setRelatedQues(null)
+      const response = await askai(generativeModel, history, prompt, lang, resType)
+      getRelatedQues(response)
+      return response
     } catch (err) {
       console.log(err)
       return null
+    }
+  }
+
+  const getRelatedQues = async(ans)=>{
+    try {
+      const response = await relatedAI(ans)
+
+      const parsed = extractJsonFromText(response)  
+
+      if(parsed){
+        setRelatedQues([parsed.que1, parsed.que2, parsed.que3])
+      }
+   
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -157,14 +191,6 @@ export default function Home() {
         setImage(img)
       }
 
-      // .map(img => ({
-      //   mimeType: img.mimeType,
-      //   base64data: img.base64data
-      // }))
-      
-      // if(imageArray[0]){
-      //   setImage(imageArray[0])
-      // }
     } catch (err) {
       console.log("error fetching image: ", err)
     }
@@ -215,10 +241,7 @@ export default function Home() {
   //   }
   // }, [toolName])
 
-  useEffect(()=>{
-    console.log("imae updated")
-    console.log(image)
-  }, [image])
+
 
   const downloadImage = () =>{
     if (!image) return;
@@ -293,16 +316,34 @@ export default function Home() {
       }]);
   
       setAnswering(true);
+      setRelatedQues(null);
   
-      (async () => {
-        const response = await getResult(history, question, searchLang, searchMode)
-        setAnswering(false)
-        setMessages((prevMessages)=> {
-          const updatedMessages = [...prevMessages]
-          updatedMessages[updatedMessages.length - 1].ans = response      
-          return updatedMessages
-        })
+      // (async () => {
+      //   const response = await getResult(history, question, searchLang, searchMode)
+      //   setAnswering(false)
+      //   setMessages((prevMessages)=> {
+      //     const updatedMessages = [...prevMessages]
+      //     updatedMessages[updatedMessages.length - 1].ans = response      
+      //     return updatedMessages
+      //   })
+      // })()
+      
+      (async ()=>{
+
+        let streamedAnswer = "";
+        await askaiStream(generativeModel, history, question,(chunk) => {
+          streamedAnswer += chunk;
+          setMessages((prev) => {
+            const updated = [...prev];
+            updated[updated.length - 1].ans += chunk;
+            return updated;
+          });
+        });
+        setAnswering(false);
+        getRelatedQues(streamedAnswer);
       })()
+
+     
 
     }else{
       if(toolMode && toolName === "draw"){
@@ -318,7 +359,7 @@ export default function Home() {
       <div ref={HomeRef} className="home" style={{
         background: !animations && "var(--main-bg)"
       }} >
-        <div ref={homeWrapperRef} className="home-wrapper">
+        <div ref={homeWrapperRef} className={`home-wrapper`}>
           <LeftSideBar
             ref={leftSidebarRef}
             drawerCollapsed={drawerCollapsed}
@@ -340,6 +381,9 @@ export default function Home() {
                 setShowRecents={setShowRecents}
                 setShowLoginDialog={setShowLoginDialog}
                 user={user}
+                setShowSettings={setShowSettings}
+                setLoginState={setLoginState}
+                setShowDialog={setShowDialog}
               />
               <div ref={introRef} className="intro">
                 <h1 ref={introTxt} className='introTxt' >{welcomeMsgHead}</h1>
@@ -364,6 +408,11 @@ export default function Home() {
                 getRandomString={getRandomString}
                 chats={chats}
                 searchContainerRef={searchContainerRef}
+                setShowToast={setShowToast}
+                setToastText={setToastText}
+                ToastRef={ToastRef}
+                generativeModel={generativeModel}
+                setGenerativeModel={setGenerativeModel}
               />
               <SearchBox
                 ref={searchBoxRef}
@@ -406,6 +455,7 @@ export default function Home() {
               isLoggedIn
               setShowSettings
               Logo={Logo}
+              relatedQues={relatedQues}
             />
 
           </div>
@@ -438,6 +488,7 @@ export default function Home() {
           showRecents &&
           <Recents 
             setShowRecents={setShowRecents}
+            setShowDialog={setShowDialog}
           /> 
         }
         {
@@ -488,7 +539,7 @@ export default function Home() {
                     loginWrapper.current.classList.add("hide")
                     setTimeout(()=>{
                       setShowLoginDialog(false)
-                    }, 300)
+                    }, 200)
                     }} >
                       <span className="material-symbols-outlined">close</span>
                   </div>
@@ -539,6 +590,13 @@ export default function Home() {
             </div>
           </div>
         }
+
+        { showToast &&
+          <Toast ref={ToastRef} text={toastText} />
+        }
+        
+
+        
 
       </div>
     </>

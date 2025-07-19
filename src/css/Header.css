@@ -1,0 +1,230 @@
+.header{
+  height: 60px;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  /* background: rgba(16, 18, 24, 1) */
+  z-index: 1;
+  backdrop-filter: blur(10px);
+}
+
+.header h1{
+  font-family: GeneralSans-Medium;
+}
+
+@media (min-width : 768px){
+  header{
+    position: fixed;
+    top: 0;
+    left: 80px;
+    float: right;
+    width: calc(100% - 80px);
+  }
+}
+
+.headcol{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.headcol p{
+  font-weight: 800;
+  font-size: 18px;
+}
+.headcol:nth-child(2){
+  text-align: center;
+  justify-content: center;
+}
+.headcol:nth-child(3) {
+  justify-content: end;
+}
+
+#headLogo{
+  width: 40px;
+  height: 40px;
+}
+
+.login-btn{
+  padding: 10px 15px;
+  border-radius: 30px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.login-btn p{
+  font-weight: 600;
+}
+
+.login-btn img{
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
+.login-btn:hover{
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+
+.home .header{
+  width: 100%;
+  height: 70px;
+  display: flex;
+  padding: 0 80px; 
+  align-items: center;
+}
+
+@media (max-width: 768px){
+  .home .header{
+    padding: 0 10px;
+  }
+}
+
+.home .header .firstCol{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  
+}
+.header.hide{
+  display: none;
+}
+.home .header .secondCol{
+  flex: 1;
+  margin-left: auto;
+  text-align: end;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 10px;
+}
+
+.secondCol .btn, .firstCol .btn{
+  width: 50px;
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.secondCol .btn:hover, .firstCol .btn:hover{
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.secondCol .btn span{
+  font-size: 26px;
+  transition: background-color 0.2s ease;
+}
+
+.secondCol .profile-container{
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+
+.secondCol .profile-container img{
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.secondCol .profile-container img:hover{
+  border: 2px solid rgb(158, 153, 153);
+}
+
+.profileInfo{
+  width: 300px;
+  /* height: 200px; */
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  position: absolute;
+  top: 30px;
+  right: -10px;
+  display: none;
+  flex-direction: column;
+  box-shadow: 10px black;
+}
+
+.secondCol .profile-container:hover .profileInfo{
+  display: flex;
+}
+
+.profileInfo{
+  padding: 10px;
+}
+
+.profileInfo .accDetails{
+  height: 60px;
+  width: 100%;
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+}
+
+.profileInfo .profilePic img:hover{
+  border: none;
+}
+
+.accDetails .info{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.accDetails .info h3{
+  margin: 0;
+  padding: 0;
+}
+
+
+.accDetails .info p{
+  font-size: 12px;
+}
+.customize-button{
+  margin-top: 5px;
+}
+.settings-button, .logout-button, .customize-button{
+  width: 100%;
+  border-radius: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.settings-button:hover, .logout-button:hover, .customize-button:hover{
+  
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+
+}
+
+.profileInfo span{
+  font-size: 18px;
+}
+
+.pbtn p{
+  font-size: 14px;
+}

@@ -1,5 +1,7 @@
 import {useState, useEffect, forwardRef} from 'react'
 import {useLocation, useNavigate} from 'react-router'
+import {signOut} from 'firebase/auth'
+import {auth} from '../firebase.js'
 import '../css/Header.css'
 import Logo from '../assets/logosmall.png'
 import Avatar from '../assets/avatar.png'
@@ -12,8 +14,11 @@ const Header = forwardRef(({
   leftSidebarRef,
   isLoggedIn,
   setShowRecents,
+  setShowSettings,
   setShowLoginDialog, 
-  user
+  user,
+  setLoginState,
+  setShowDialog
 }, ref)=>{
   const navigate = useNavigate()
   const [route,
@@ -46,11 +51,45 @@ const Header = forwardRef(({
           </div>
           :
           <>
-            <div className="btn recents" title='Recents' onClick={()=> setShowRecents(true)} >
+            <div className="btn recents" title='Recents' onClick={()=>{
+              setShowDialog(true)
+               setShowRecents(true)
+            }} >
               <span className="material-symbols-outlined">history</span>
             </div>
             <div className="profile-container">
               <img src={user.photoURL} alt="profile" />
+              <div className="profileInfo">
+                <div className='accDetails'>
+                  <div className='profilePic'>
+                    <img src={user.photoURL} alt="" style={{
+                      width: "50px",
+                      height: "50px",
+                      marginTop: "5px"
+                    }} />
+                  </div>
+                  <div className='info'>
+                    <h4>{user.displayName}</h4>
+                    <p>{user.email}</p>
+                  </div>
+                 
+                </div>
+                <div className="customize-button pbtn" onClick={()=> setShowSettings(true)}>
+                    <span className="material-symbols-outlined">chat_bubble</span>
+                    <p>Customize Que AI</p>
+                  </div>
+                 <div className="settings-button pbtn" onClick={()=> setShowSettings(true)}>
+                    <span className="material-symbols-outlined">settings</span>
+                    <p>Settings</p>
+                  </div>
+                  <div className="logout-button pbtn" onClick={ async ()=>{
+                    await signOut(auth)
+                    setLoginState(false)
+                  }}>
+                    <span className="material-symbols-outlined">logout</span>
+                    <p>Sign out</p>
+                  </div>
+              </div>
             </div>
           </>
           

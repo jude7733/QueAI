@@ -97,7 +97,7 @@
   
 }
 
-.header{
+/* .header{
   height: 50px;
   width: 100%;
   display: flex;
@@ -112,7 +112,7 @@
   border-top-right-radius: 30px;
   padding: 0 10px;
   z-index: 100;
-}
+} */
 
 
 .headRow:first-child{
