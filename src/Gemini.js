@@ -4,7 +4,7 @@ import { GoogleGenAI, Modality } from "@google/genai"
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_AI_API_KEY);
 
 const ai = new GoogleGenAI({
-  apiKey: import.meta.env.VITE_AI_API_KEY
+  apiKey: import.meta.env.VITE_AI_API_KEY 
 });
 
 const model = genAI.getGenerativeModel({ 

@@ -257,7 +257,7 @@ export default function Home() {
   }
 
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (que) => {
 
     const inputBox = inputRef.current
     inputBox.value = ''
@@ -266,9 +266,7 @@ export default function Home() {
     inputBox.style.height = inputBox.scrollHeight + 'px';
     setBtnState(false)
 
-    
-
-    
+    let prompt = que || question;
 
     if(!toolMode || toolName !== "draw"){
 
@@ -311,27 +309,19 @@ export default function Home() {
   
   
       setMessages([...messages, {
-        que: question,
+        que: prompt,
         ans: ""
       }]);
   
       setAnswering(true);
       setRelatedQues(null);
-  
-      // (async () => {
-      //   const response = await getResult(history, question, searchLang, searchMode)
-      //   setAnswering(false)
-      //   setMessages((prevMessages)=> {
-      //     const updatedMessages = [...prevMessages]
-      //     updatedMessages[updatedMessages.length - 1].ans = response      
-      //     return updatedMessages
-      //   })
-      // })()
+
+      
       
       (async ()=>{
 
         let streamedAnswer = "";
-        await askaiStream(generativeModel, history, question,(chunk) => {
+        await askaiStream(generativeModel, history, prompt,(chunk) => {
           streamedAnswer += chunk;
           setMessages((prev) => {
             const updated = [...prev];
@@ -342,8 +332,6 @@ export default function Home() {
         setAnswering(false);
         getRelatedQues(streamedAnswer);
       })()
-
-     
 
     }else{
       if(toolMode && toolName === "draw"){
@@ -456,6 +444,9 @@ export default function Home() {
               setShowSettings
               Logo={Logo}
               relatedQues={relatedQues}
+              setQuestion={setQuestion}
+              handleButtonClick={handleButtonClick}
+              question={question}
             />
 
           </div>
