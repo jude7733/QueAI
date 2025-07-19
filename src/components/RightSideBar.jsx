@@ -1,7 +1,6 @@
 import React, {forwardRef} from "react";
 
 const RightSideBar = forwardRef(({
-  rightSidebarRef,
   drawerCollapsed,
   setDrawerCollapsed,
   searched,
@@ -9,7 +8,10 @@ const RightSideBar = forwardRef(({
   isLoggedIn,
   setShowSettings,
   relatedQues,
-  Logo
+  Logo,
+  setQuestion,
+  handleButtonClick,
+  question
 }, ref) => {
 
   return (
@@ -24,7 +26,12 @@ const RightSideBar = forwardRef(({
                 {
                     relatedQues !== null ?
                         relatedQues.map((que, index) => 
-                            <li className="related-ques-item" key={index}>
+                            <li className="related-ques-item" onClick={()=> {
+                                setTimeout(()=>{
+                                    handleButtonClick(que)
+                                }, 100)
+                                
+                            }} key={index}>
                                 <p>{que}</p>
                                 <span className="material-symbols-outlined">arrow_outward</span>
                             </li>
