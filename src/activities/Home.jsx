@@ -493,21 +493,38 @@ export default function Home() {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
+      let buffer = "";
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
+        
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        
+        // Keep the last partial line in the buffer
+        buffer = lines.pop() || "";
 
-        const recievedChunk = JSON.parse(chunk)
-
-        const message = recievedChunk.messages
-          .filter(m => m.type === "ai")
-          .pop()?.content
-
-        onChunk(message)
-        console.log(chunk);
-
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const recievedChunk = JSON.parse(line);
+            
+            // Allow tools or other info to be streamed without crashing if no AI message is present
+            if (recievedChunk && recievedChunk.messages) {
+              const message = recievedChunk.messages
+                .filter(m => m.type === "ai")
+                .pop()?.content;
+                
+              if (message) {
+                onChunk(message);
+              }
+            }
+            console.log(line);
+          } catch (e) {
+            console.error("Error parsing JSON chunk:", e, "Line:", line);
+          }
+        }
       }
 
       setAnswering(false);

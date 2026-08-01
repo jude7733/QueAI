@@ -591,7 +591,7 @@ const SearchBox = forwardRef(({
                               <div className="model-selector-list-item switch-container" onClick={() => setProEnabled(!proEnabled)}>
                                 <div>
                                   <p>Pro mode</p>
-                                  <p>Use Langchain models</p>
+                                  <p>Use Agents</p>
                                 </div>
                                 <div style={{
                                   position: "relative",
